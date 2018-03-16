@@ -6,7 +6,10 @@
 #define ZELDA_ZELDA_H
 
 #include <string>
+#include <list>
 #include "ZeldaLogger.h"
+#include "ZeldaResponse.h"
+#include "ZeldaRequest.h"
 
 #define ZELDA_MODE_PLAIN "plain"
 #define ZELDA_MODE_TUNNEL "tunnel"
@@ -15,6 +18,8 @@
 typedef std::string ZeldaMode;
 
 class Zelda {
+
+    /* Public Methods */
 
 public:
 
@@ -34,8 +39,8 @@ public:
 
 #pragma mark - Advanced Options
 
-    int GetUseSplice();
-    void SetUseSplice(int splice);
+    bool GetUseSplice();
+    void SetUseSplice(bool splice);
 
     int GetMaxConnection();
     void SetMaxConnection(int count);
@@ -49,6 +54,8 @@ public:
 
     int StartProxy(const ZeldaMode &mode);
 
+    /* Private Methods */
+
 private:
 
 #pragma mark - Logger
@@ -57,14 +64,20 @@ private:
 
 #pragma mark - Options
 
-    int _use_splice = 0;
+    bool _use_splice = false;
     int _max_connection = 20;
 
 #pragma mark - Proxies
 
-    int StartPlainProxy();
-    int StartTunnelProxy();
+    int StartPlainProxy(int server_sock);
+    int StartTunnelProxy(int server_sock);
     int StartTCPProxy(int server_sock);
+
+#pragma mark - Response Builder
+
+    bool _builder_enabled;
+    ZeldaResponse _responseBuilder;
+    ZeldaRequest _requestBuilder;
 
 #pragma mark - Socket
 
@@ -77,14 +90,13 @@ private:
     std::string GetRemoteSocketString();
 
     int GetServerSock();
-
     int CreateSocket(const char *bind_addr, int port, int max_connection);
 
 #pragma mark - TCP Client
 
     void HandleTCPClient(int client_sock, struct sockaddr_in client_addr);
     int CreateTCPConnection(const char *remote_host, int remote_port);
-    void ForwardTCPData(int source_sock, int destination_sock);
+    void ForwardTCPData(int source_sock, int destination_sock, bool from_client);
 
 #pragma mark - Helper
 
@@ -93,7 +105,6 @@ private:
     int _connections_processed = 0;
     void AddProcessedConnection();
     void ResetProcessedConnection();
-
 };
 
 

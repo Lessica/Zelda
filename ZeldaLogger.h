@@ -46,6 +46,7 @@ private:
     void Err(const std::string &level, const std::string &msg);
 
     std::string GetCurrentTimeString();
+
 };
 
 

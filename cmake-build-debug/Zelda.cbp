@@ -8,100 +8,130 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/Users/Zheng/CLionProjects/Zelda/cmake-build-debug"/>
+				<Option working_dir="/Users/darwin/Projects/Zelda/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/Users/Zheng/CLionProjects/Zelda/cmake-build-debug"/>
+				<Option working_dir="/Users/darwin/Projects/Zelda/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/Users/Zheng/CLionProjects/Zelda/cmake-build-debug"/>
+				<Option working_dir="/Users/darwin/Projects/Zelda/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="Zelda">
-				<Option output="/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Zelda" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/Zheng/CLionProjects/Zelda/cmake-build-debug"/>
+				<Option output="/Users/darwin/Projects/Zelda/cmake-build-debug/Zelda" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/darwin/Projects/Zelda/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/Applications/Xcode_9_1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/Applications/Xcode_9_1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode_9_1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
 					<Add directory="/System/Library/Frameworks"/>
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 Zelda"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 Zelda"/>
+					<CompileFile command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="Zelda/fast">
-				<Option output="/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Zelda" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/Zheng/CLionProjects/Zelda/cmake-build-debug"/>
+				<Option output="/Users/darwin/Projects/Zelda/cmake-build-debug/Zelda" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/darwin/Projects/Zelda/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/Applications/Xcode_9_1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/Applications/Xcode_9_1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode_9_1.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
 					<Add directory="/System/Library/Frameworks"/>
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 Zelda/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Zheng/CLionProjects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 Zelda/fast"/>
+					<CompileFile command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/local/bin/gmake -j8 -f &quot;/Users/darwin/Projects/Zelda/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/Zheng/CLionProjects/Zelda/Zelda.cpp">
+		<Unit filename="/Users/darwin/Projects/Zelda/Zelda.cpp">
 			<Option target="Zelda"/>
 		</Unit>
-		<Unit filename="/Users/Zheng/CLionProjects/Zelda/Zelda.h">
+		<Unit filename="/Users/darwin/Projects/Zelda/Zelda.h">
 			<Option target="Zelda"/>
 		</Unit>
-		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaDefines.h">
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaDefines.h">
 			<Option target="Zelda"/>
 		</Unit>
-		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaLogger.cpp">
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaHTTPRequest.cpp">
 			<Option target="Zelda"/>
 		</Unit>
-		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaLogger.h">
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaHTTPRequest.h">
 			<Option target="Zelda"/>
 		</Unit>
-		<Unit filename="/Users/Zheng/CLionProjects/Zelda/cxxopts.hpp">
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaHTTPResponse.cpp">
 			<Option target="Zelda"/>
 		</Unit>
-		<Unit filename="/Users/Zheng/CLionProjects/Zelda/main.cpp">
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaHTTPResponse.h">
 			<Option target="Zelda"/>
 		</Unit>
-		<Unit filename="/Users/Zheng/CLionProjects/Zelda/CMakeLists.txt">
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaLogger.cpp">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaLogger.h">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaProtocol.cpp">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaProtocol.h">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaRequest.cpp">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaRequest.h">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaResponse.cpp">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/darwin/Projects/Zelda/ZeldaResponse.h">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/darwin/Projects/Zelda/cxxopts.hpp">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/darwin/Projects/Zelda/main.cpp">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/darwin/Projects/Zelda/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

@@ -3,5 +3,5 @@ project(Zelda)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp Zelda.cpp Zelda.h cxxopts.hpp ZeldaDefines.h ZeldaLogger.cpp ZeldaLogger.h)
+set(SOURCE_FILES main.cpp Zelda.cpp Zelda.h cxxopts.hpp ZeldaDefines.h ZeldaLogger.cpp ZeldaLogger.h ZeldaResponse.cpp ZeldaResponse.h ZeldaRequest.cpp ZeldaRequest.h ZeldaHTTPResponse.cpp ZeldaHTTPResponse.h ZeldaHTTPRequest.cpp ZeldaHTTPRequest.h ZeldaProtocol.cpp ZeldaProtocol.h)
 add_executable(Zelda ${SOURCE_FILES})

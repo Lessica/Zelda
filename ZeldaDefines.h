@@ -10,6 +10,8 @@
 #define ZELDA_ADDRESS "127.0.0.1"
 #define ZELDA_PORT "1087"
 
+#define ZELDA_BUF_SIZE 16384
+
 #if defined(__linux__)
 
 #define ZELDA_USE_SPLICE 1

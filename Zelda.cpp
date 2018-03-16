@@ -14,8 +14,8 @@
 
 #include "Zelda.h"
 #include "ZeldaDefines.h"
+#include "ZeldaHTTPResponse.h"
 
-#define ZELDA_BUF_SIZE 16384
 #define PREAD  0
 #define PWRITE 1
 
@@ -34,12 +34,28 @@ void sigterm_handler(int signal) {
     exit(0);
 }
 
+typedef enum {
+    z_address_invalid = 0,
+    z_address_ipv4 = 1,
+    z_address_ipv6 = 2
+} z_address_type;
+
+z_address_type z_check_address(const char *addr) {
+    in_addr s{};
+    in6_addr s6{};
+    int flag = 0;
+    flag = inet_pton(AF_INET, addr, &s); // ipv4?
+    if (flag > 0) return z_address_ipv4;
+    flag = inet_pton(AF_INET6, addr, &s6); // ipv6
+    if (flag > 0) return z_address_ipv6;
+    return z_address_invalid;
+}
+
 #pragma mark - Initializers
 
 Zelda::Zelda(const std::string &address, int port) {
     const char *addr = address.c_str();
-    in_addr_t inaddr = inet_addr(addr);
-    if (inaddr != INADDR_NONE) {
+    if (z_check_address(addr)) {
         _address = std::string(address);
     } else {
         _address = std::string("127.0.0.1");
@@ -49,7 +65,7 @@ Zelda::Zelda(const std::string &address, int port) {
 
 #pragma mark - Getters
 
-int Zelda::GetUseSplice() {
+bool Zelda::GetUseSplice() {
     return _use_splice;
 }
 
@@ -91,12 +107,15 @@ int Zelda::GetServerSock() {
 
 #pragma mark - Setters
 
-void Zelda::SetUseSplice(int splice) {
+void Zelda::SetUseSplice(bool splice) {
     _use_splice = splice;
 }
 
 void Zelda::SetRemoteAddress(const std::string &address) {
-    _remote_address = std::string(address);
+    const char *addr = address.c_str();
+    if (z_check_address(addr)) {
+        _remote_address = std::string(address);
+    }
 }
 
 void Zelda::SetRemotePort(int port) {
@@ -122,7 +141,6 @@ void Zelda::ResetProcessedConnection() {
 #pragma mark - Proxies
 
 int Zelda::StartProxy(const ZeldaMode &mode) {
-
     signal(SIGCHLD, sigchld_handler); // prevent ended children from becoming zombies
     signal(SIGTERM, sigterm_handler); // handle KILL signal
 
@@ -135,9 +153,9 @@ int Zelda::StartProxy(const ZeldaMode &mode) {
              + "\"" + mode + "\" proxy listen on " + GetSocketString() + "...");
 
     if (mode == ZELDA_MODE_PLAIN) {
-        return StartPlainProxy();
+        return StartPlainProxy(GetServerSock());
     } else if (mode == ZELDA_MODE_TUNNEL) {
-        return StartTunnelProxy();
+        return StartTunnelProxy(GetServerSock());
     } else if (mode == ZELDA_MODE_TCP) {
         return StartTCPProxy(GetServerSock());
     }
@@ -146,14 +164,14 @@ int Zelda::StartProxy(const ZeldaMode &mode) {
 
 }
 
-int Zelda::StartPlainProxy() {
-
-    return 0;
+int Zelda::StartPlainProxy(int server_sock) {
+    _builder_enabled = true;
+    _responseBuilder = ZeldaHTTPResponse();
+    return StartTCPProxy(server_sock);
 }
 
-int Zelda::StartTunnelProxy() {
-
-    return 0;
+int Zelda::StartTunnelProxy(int server_sock) {
+    return StartTCPProxy(server_sock);
 }
 
 int Zelda::StartTCPProxy(int server_sock) {
@@ -224,12 +242,12 @@ void Zelda::HandleTCPClient(int client_sock, struct sockaddr_in client_addr) {
     }
 
     if (fork() == 0) { // a process forwarding data from client to remote socket
-        ForwardTCPData(client_sock, remote_sock);
+        ForwardTCPData(client_sock, remote_sock, true);
         exit(0);
     }
 
     if (fork() == 0) { // a process forwarding data from remote socket to client
-        ForwardTCPData(remote_sock, client_sock);
+        ForwardTCPData(remote_sock, client_sock, false);
         exit(0);
     }
 
@@ -268,8 +286,13 @@ int Zelda::CreateTCPConnection(const char *remote_host, int remote_port) {
     return sock;
 }
 
-void Zelda::ForwardTCPData(int source_sock, int destination_sock) {
-    int use_splice = _use_splice;
+void Zelda::ForwardTCPData(int source_sock, int destination_sock, bool from_client) {
+    bool use_splice = _use_splice;
+    if (use_splice && _builder_enabled) {
+        use_splice = false;
+        Log.Warning("use_splice cannot be used with response / request builder, ignored");
+    }
+
     ssize_t n;
 
     if (use_splice) {
@@ -296,14 +319,6 @@ void Zelda::ForwardTCPData(int source_sock, int destination_sock) {
         close(buf_pipe[0]);
         close(buf_pipe[1]);
 
-        shutdown(destination_sock, SHUT_RDWR); // stop other processes from using socket
-        close(destination_sock);
-
-        shutdown(source_sock, SHUT_RDWR); // stop other processes from using socket
-        close(source_sock);
-
-        return;
-
 #endif
     } else {
 
@@ -317,15 +332,13 @@ void Zelda::ForwardTCPData(int source_sock, int destination_sock) {
             Log.Error(Log.S() + "Cannot read from socket");
         }
 
-        shutdown(destination_sock, SHUT_RDWR); // stop other processes from using socket
-        close(destination_sock);
-
-        shutdown(source_sock, SHUT_RDWR); // stop other processes from using socket
-        close(source_sock);
-
-        return;
-
     }
+
+    shutdown(destination_sock, SHUT_RDWR); // stop other processes from using socket
+    close(destination_sock);
+
+    shutdown(source_sock, SHUT_RDWR); // stop other processes from using socket
+    close(source_sock);
 }
 
 #pragma mark - Helpers
@@ -334,3 +347,4 @@ std::string Zelda::SocketStringFromSocket(sockaddr_in addr) {
     const char *addr_str = inet_ntoa(addr.sin_addr);
     return std::string(addr_str) + ":" + std::to_string(ntohs(addr.sin_port));
 }
+
