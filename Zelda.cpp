@@ -2,19 +2,11 @@
 // Created by Zheng on 05/03/2018.
 //
 
-#include <arpa/inet.h>
+#import <unistd.h>
+#import <netdb.h>
 
-#include <unistd.h>
-#include <netdb.h>
-#include <climits>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/uio.h>
-
-#include "Zelda.h"
-#include "ZeldaDefines.h"
-#include "ZeldaHTTPResponse.h"
+#import "Zelda.h"
+#import "ZeldaDefines.h"
 
 #define PREAD  0
 #define PWRITE 1
@@ -165,9 +157,9 @@ int Zelda::StartProxy(const ZeldaMode &mode) {
 }
 
 int Zelda::StartPlainProxy(int server_sock) {
-    _builder_enabled = true;
-    _responseBuilder = ZeldaHTTPResponse();
-    return StartTCPProxy(server_sock);
+    ZeldaProtocol *requestBuilder = new ZeldaHTTPRequest();
+    ZeldaProtocol *responseBuilder = new ZeldaHTTPResponse();
+    return StartTCPProxy(server_sock, requestBuilder, responseBuilder);
 }
 
 int Zelda::StartTunnelProxy(int server_sock) {
@@ -175,6 +167,10 @@ int Zelda::StartTunnelProxy(int server_sock) {
 }
 
 int Zelda::StartTCPProxy(int server_sock) {
+    return StartTCPProxy(server_sock, nullptr, nullptr);
+}
+
+int Zelda::StartTCPProxy(int server_sock, ZeldaProtocol *inPrococol, ZeldaProtocol *outProtocol) {
     struct sockaddr_in client_addr {};
     socklen_t addr_len = sizeof(client_addr);
 
@@ -182,7 +178,7 @@ int Zelda::StartTCPProxy(int server_sock) {
         int client_sock = accept(server_sock, (struct sockaddr *)&client_addr, &addr_len);
         if (fork() == 0) { // handle client connection in a separate process
             close(server_sock);
-            HandleTCPClient(client_sock, client_addr);
+            HandleTCPClient(client_sock, client_addr, inPrococol, outProtocol);
             exit(0);
         } else {
             AddProcessedConnection();
@@ -233,6 +229,10 @@ int Zelda::CreateSocket(const char *bind_addr, int port, int max_connection) {
 #pragma mark - TCP Client
 
 void Zelda::HandleTCPClient(int client_sock, struct sockaddr_in client_addr) {
+    HandleTCPClient(client_sock, client_addr, nullptr, nullptr);
+}
+
+void Zelda::HandleTCPClient(int client_sock, struct sockaddr_in client_addr, ZeldaProtocol *inPrococol, ZeldaProtocol *outProtocol) {
 
     Log.Debug(Log.S() + "Receive connection from " + SocketStringFromSocket(client_addr));
 
@@ -242,12 +242,12 @@ void Zelda::HandleTCPClient(int client_sock, struct sockaddr_in client_addr) {
     }
 
     if (fork() == 0) { // a process forwarding data from client to remote socket
-        ForwardTCPData(client_sock, remote_sock, true);
+        ForwardTCPData(client_sock, remote_sock, inPrococol);
         exit(0);
     }
 
     if (fork() == 0) { // a process forwarding data from remote socket to client
-        ForwardTCPData(remote_sock, client_sock, false);
+        ForwardTCPData(remote_sock, client_sock, outProtocol);
         exit(0);
     }
 
@@ -286,9 +286,9 @@ int Zelda::CreateTCPConnection(const char *remote_host, int remote_port) {
     return sock;
 }
 
-void Zelda::ForwardTCPData(int source_sock, int destination_sock, bool from_client) {
+void Zelda::ForwardTCPData(int source_sock, int destination_sock, ZeldaProtocol *protocol) {
     bool use_splice = _use_splice;
-    if (use_splice && _builder_enabled) {
+    if (use_splice && protocol) {
         use_splice = false;
         Log.Warning("use_splice cannot be used with response / request builder, ignored");
     }

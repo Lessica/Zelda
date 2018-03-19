@@ -2,9 +2,9 @@
 // Created by Zheng on 05/03/2018.
 //
 
-#include <iostream>
-#include <ctime>
-#include "ZeldaLogger.h"
+#import <iostream>
+#import <ctime>
+#import "ZeldaLogger.h"
 
 ZeldaLogLevel ZeldaLogger::LogLevelFromLevelString(const std::string &level) {
     if (level == ZELDA_LOG_FATAL) {

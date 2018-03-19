@@ -2,15 +2,8 @@
 // Created by Zheng Wu on 2018/3/16.
 //
 
-#ifndef ZELDA_ZELDAHTTPREQUEST_H
-#define ZELDA_ZELDAHTTPREQUEST_H
+#import "ZeldaRequest.h"
 
-
-#include "ZeldaRequest.h"
-
-class ZeldaHTTPRequest: ZeldaRequest {
+class ZeldaHTTPRequest: public ZeldaRequest {
 
 };
-
-
-#endif //ZELDA_ZELDAHTTPREQUEST_H

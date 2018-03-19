@@ -2,15 +2,8 @@
 // Created by Zheng Wu on 2018/3/16.
 //
 
-#ifndef ZELDA_ZELDAHTTPRESPONSE_H
-#define ZELDA_ZELDAHTTPRESPONSE_H
+#import "ZeldaResponse.h"
 
-
-#include "ZeldaResponse.h"
-
-class ZeldaHTTPResponse: ZeldaResponse {
+class ZeldaHTTPResponse: public ZeldaResponse {
 
 };
-
-
-#endif //ZELDA_ZELDAHTTPRESPONSE_H

@@ -2,10 +2,7 @@
 // Created by Zheng on 05/03/2018.
 //
 
-#ifndef ZELDA_ZELDALOGGER_H
-#define ZELDA_ZELDALOGGER_H
-
-#include <string>
+#import <string>
 
 #define ZELDA_LOG_FATAL "fatal"
 #define ZELDA_LOG_ERROR "error"
@@ -48,6 +45,3 @@ private:
     std::string GetCurrentTimeString();
 
 };
-
-
-#endif //ZELDA_ZELDALOGGER_H

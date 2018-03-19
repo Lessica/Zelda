@@ -1,12 +1,12 @@
-#include <iostream>
-#include <unistd.h>
+#import <iostream>
+#import <unistd.h>
 
-#include "cxxopts.hpp"
+#import "cxxopts.hpp"
 
-#include "ZeldaDefines.h"
+#import "ZeldaDefines.h"
 
-#include "Zelda.h"
-#include "ZeldaLogger.h"
+#import "Zelda.h"
+#import "ZeldaLogger.h"
 
 int main(int argc, char* argv[])
 {

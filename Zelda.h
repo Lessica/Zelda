@@ -2,14 +2,13 @@
 // Created by Zheng on 05/03/2018.
 //
 
-#ifndef ZELDA_ZELDA_H
-#define ZELDA_ZELDA_H
+#import <string>
+#import <list>
+#import <arpa/inet.h>
 
-#include <string>
-#include <list>
-#include "ZeldaLogger.h"
-#include "ZeldaResponse.h"
-#include "ZeldaRequest.h"
+#import "ZeldaLogger.h"
+#import "ZeldaHTTPRequest.h"
+#import "ZeldaHTTPResponse.h"
 
 #define ZELDA_MODE_PLAIN "plain"
 #define ZELDA_MODE_TUNNEL "tunnel"
@@ -72,12 +71,7 @@ private:
     int StartPlainProxy(int server_sock);
     int StartTunnelProxy(int server_sock);
     int StartTCPProxy(int server_sock);
-
-#pragma mark - Response Builder
-
-    bool _builder_enabled;
-    ZeldaResponse _responseBuilder;
-    ZeldaRequest _requestBuilder;
+    int StartTCPProxy(int server_sock, ZeldaProtocol *inPrococol, ZeldaProtocol *outProtocol);
 
 #pragma mark - Socket
 
@@ -94,9 +88,10 @@ private:
 
 #pragma mark - TCP Client
 
-    void HandleTCPClient(int client_sock, struct sockaddr_in client_addr);
+    void HandleTCPClient(int client_sock, sockaddr_in client_addr);
+    void HandleTCPClient(int client_sock, struct sockaddr_in client_addr, ZeldaProtocol *inPrococol, ZeldaProtocol *outProtocol);
     int CreateTCPConnection(const char *remote_host, int remote_port);
-    void ForwardTCPData(int source_sock, int destination_sock, bool from_client);
+    void ForwardTCPData(int source_sock, int destination_sock, ZeldaProtocol *protocol);
 
 #pragma mark - Helper
 
@@ -105,7 +100,5 @@ private:
     int _connections_processed = 0;
     void AddProcessedConnection();
     void ResetProcessedConnection();
+
 };
-
-
-#endif //ZELDA_ZELDA_H
