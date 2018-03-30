@@ -25,13 +25,17 @@ public:
     ZeldaLogger();
     explicit ZeldaLogger(const std::string &level);
 
-    std::string S();
     void SetLogLevel(const std::string &level);
     void Fatal(const std::string &msg);
+    void Fatal(const char *msg);
     void Error(const std::string &msg);
+    void Error(const char *msg);
     void Warning(const std::string &msg);
+    void Warning(const char *msg);
     void Info(const std::string &msg);
+    void Info(const char *msg);
     void Debug(const std::string &msg);
+    void Debug(const char *msg);
     void Flush();
 
 private:
@@ -43,5 +47,6 @@ private:
     void Err(const std::string &level, const std::string &msg);
 
     std::string GetCurrentTimeString();
+    std::string S();
 
 };

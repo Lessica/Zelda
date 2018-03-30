@@ -80,6 +80,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/darwin/Projects/Zelda/Buffer.cpp">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/darwin/Projects/Zelda/Buffer.hpp">
+			<Option target="Zelda"/>
+		</Unit>
 		<Unit filename="/Users/darwin/Projects/Zelda/Zelda.cpp">
 			<Option target="Zelda"/>
 		</Unit>

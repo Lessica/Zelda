@@ -84,16 +84,16 @@ int main(int argc, char* argv[])
         int port_n = std::stoi(port);
         int max_connection_n = std::stoi(max_connection);
 
-        Zelda z(address, port_n);
-        z.SetMaxConnection(max_connection_n);
+        auto *z = new Zelda(address, port_n);
+        z->SetMaxConnection(max_connection_n);
 
         if (result.count("remote-address")) {
             std::string remote_address = result["remote-address"].as<std::string>();
-            z.SetRemoteAddress(remote_address);
+            z->SetRemoteAddress(remote_address);
         }
 
         if (result.count("remote-port")) {
-            z.SetRemotePort(std::stoi(result["remote-port"].as<std::string>()));
+            z->SetRemotePort(std::stoi(result["remote-port"].as<std::string>()));
         }
 
 #if defined(ZELDA_USE_SPLICE)
@@ -102,13 +102,18 @@ int main(int argc, char* argv[])
         }
 #endif
 
-        ZeldaLogger zl = ZeldaLogger(level);
-        z.SetLogger(zl);
+        auto zl = new ZeldaLogger(level);
+        z->SetLogger(zl);
 
-        zl.Info(title);
+        zl->Info(title);
         usleep(100000);
 
-        return z.StartProxy(mode);
+        int ret_code = z->StartProxy(mode);
+
+        delete z;
+        delete zl;
+
+        return ret_code;
     } catch (const cxxopts::OptionException& e) {
         std::cout << "error parsing options: " << e.what() << std::endl;
         return 1;

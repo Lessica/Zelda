@@ -88,3 +88,23 @@ ZeldaLogger::ZeldaLogger(const std::string &level) {
 ZeldaLogger::ZeldaLogger() : ZeldaLogger("info") {
 
 }
+
+void ZeldaLogger::Fatal(const char *msg) {
+    Fatal(S() + msg);
+}
+
+void ZeldaLogger::Error(const char *msg) {
+    Error(S() + msg);
+}
+
+void ZeldaLogger::Warning(const char *msg) {
+    Warning(S() + msg);
+}
+
+void ZeldaLogger::Info(const char *msg) {
+    Info(S() + msg);
+}
+
+void ZeldaLogger::Debug(const char *msg) {
+    Debug(S() + msg);
+}

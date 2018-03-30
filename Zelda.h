@@ -46,8 +46,8 @@ public:
 
 #pragma mark - Loggers
 
-    ZeldaLogger GetLogger();
-    void SetLogger(ZeldaLogger logger);
+    ZeldaLogger *GetLogger();
+    void SetLogger(ZeldaLogger *logger);
 
 #pragma mark - Launch
 
@@ -59,7 +59,7 @@ private:
 
 #pragma mark - Logger
 
-    ZeldaLogger Log;
+    ZeldaLogger *Log = nullptr;
 
 #pragma mark - Options
 
@@ -68,10 +68,7 @@ private:
 
 #pragma mark - Proxies
 
-    int StartPlainProxy(int server_sock);
-    int StartTunnelProxy(int server_sock);
-    int StartTCPProxy(int server_sock);
-    int StartTCPProxy(int server_sock, ZeldaProtocol *inPrococol, ZeldaProtocol *outProtocol);
+    int StartTCPProxy(int server_sock, ZeldaMode mode);
 
 #pragma mark - Socket
 
@@ -88,10 +85,14 @@ private:
 
 #pragma mark - TCP Client
 
-    void HandleTCPClient(int client_sock, sockaddr_in client_addr);
-    void HandleTCPClient(int client_sock, struct sockaddr_in client_addr, ZeldaProtocol *inPrococol, ZeldaProtocol *outProtocol);
+    void HandleTCPClient(int client_sock);
+    void HandlePlainClient(int client_sock);
     int CreateTCPConnection(const char *remote_host, int remote_port);
-    void ForwardTCPData(int source_sock, int destination_sock, ZeldaProtocol *protocol);
+
+#pragma mark - Data Forwarding
+
+    void ForwardTCPData(int source_sock, int destination_sock);
+    void ForwardProtocolData(int source_sock, int destination_sock, ZeldaProtocol *protocol);
 
 #pragma mark - Helper
 

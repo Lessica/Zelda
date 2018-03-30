@@ -3,3 +3,14 @@
 //
 
 #import "ZeldaHTTPRequest.h"
+
+ZeldaHTTPRequest::ZeldaHTTPRequest() : ZeldaProtocol() {
+
+}
+
+ZeldaHTTPRequest::~ZeldaHTTPRequest() = default;
+
+void ZeldaHTTPRequest::processChuck(char **inOut, size_t len, size_t *newLen) {
+    ZeldaProtocol::processChuck(inOut, len, newLen);
+    this->packetCount++;
+}

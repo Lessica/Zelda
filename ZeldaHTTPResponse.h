@@ -2,8 +2,15 @@
 // Created by Zheng Wu on 2018/3/16.
 //
 
-#import "ZeldaResponse.h"
+#import "ZeldaProtocol.h"
 
-class ZeldaHTTPResponse: public ZeldaResponse {
+class ZeldaHTTPResponse: public ZeldaProtocol {
+public:
+    ZeldaHTTPResponse();
+    ~ZeldaHTTPResponse() override;
+    void processChuck(char **inOut, size_t len, size_t *newLen) override;
 
+private:
+    void processResponseHeader(char **inOut, size_t len, size_t *newLen);
+    std::string additionalHeaderFields();
 };
