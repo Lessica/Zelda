@@ -8,9 +8,9 @@ class ZeldaHTTPResponse: public ZeldaProtocol {
 public:
     ZeldaHTTPResponse();
     ~ZeldaHTTPResponse() override;
-    void processChuck(char **inOut, size_t len, size_t *newLen) override;
+    void processChuck(char **inOut, size_t *len) override;
+    std::string description() override;
 
 private:
-    void processResponseHeader(char **inOut, size_t len, size_t *newLen);
-    std::string additionalHeaderFields();
+    void processResponseHeader(char **inOut, size_t *len);
 };

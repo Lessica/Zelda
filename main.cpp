@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 #if defined(ZELDA_USE_SPLICE)
                 ("use-splice", "Use splice to boost data copy")
 #endif
-                ("mode", "Proxy mode (plain*/tunnel)", cxxopts::value<std::string>(default_mode), "proxy-mode")
+                ("mode", "Proxy mode (plain*/tunnel/tcp)", cxxopts::value<std::string>(default_mode), "proxy-mode")
                 ("log", "Debug level (error/warning/info*/debug)", cxxopts::value<std::string>(default_level), "debug-level")
                 ("version", "Print version")
                 ("help", "Print help");

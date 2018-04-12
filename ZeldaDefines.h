@@ -5,7 +5,7 @@
 #define ZELDA_NAME "ZeldaProxy"
 #define ZELDA_VERSION "1.0"
 #define ZELDA_ADDRESS "127.0.0.1"
-#define ZELDA_PORT "1087"
+#define ZELDA_PORT "10087"
 
 #define ZELDA_BUF_SIZE 16384
 

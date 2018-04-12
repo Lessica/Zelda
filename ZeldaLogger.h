@@ -42,11 +42,14 @@ private:
 
     ZeldaLogLevel _level;
     ZeldaLogLevel LogLevelFromLevelString(const std::string &level);
+    std::string ColorStringFromLevel(const std::string &level);
 
     void Log(const std::string &level, const std::string &msg);
     void Err(const std::string &level, const std::string &msg);
 
     std::string GetCurrentTimeString();
     std::string S();
+
+    bool isColoredTerminal;
 
 };

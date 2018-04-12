@@ -10,13 +10,21 @@ public:
     ZeldaProtocol();
     virtual ~ZeldaProtocol();
 
-    virtual void processChuck(char **inOut, size_t len, size_t *newLen);
+    virtual void processChuck(char **inOut, size_t *len);
     virtual std::string description();
+
+    bool isActive();
+    bool shouldKeepAlive();
 
 #pragma mark - Loggers
 
     ZeldaLogger *GetLogger();
     void SetLogger(ZeldaLogger *logger);
+
+#pragma mark - Remote
+
+    virtual std::string GetRemoteAddress();
+    virtual int GetRemotePort();
 
 protected:
 
@@ -27,9 +35,16 @@ protected:
 #pragma mark - Buffer
 
     size_t packetCount = 0;
+    size_t inBytes = 0;
+    size_t outBytes = 0;
+
+#pragma mark - Flags
+
+    bool active = true;
+    bool keepAlive = false;
 
 private:
 
-    void processStartLine(char **inOut, size_t len, size_t *newLen);
+    void processStartLine(char **inOut, size_t *len);
 
 };

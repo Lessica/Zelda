@@ -87,7 +87,9 @@ private:
 
     void HandleTCPClient(int client_sock);
     void HandlePlainClient(int client_sock);
+    void HandleTunnelClient(int client_sock);
     int CreateTCPConnection(const char *remote_host, int remote_port);
+    int CreateTCPConnection(const char *remote_host, int remote_port, bool keep_alive);
 
 #pragma mark - Data Forwarding
 
@@ -101,5 +103,4 @@ private:
     int _connections_processed = 0;
     void AddProcessedConnection();
     void ResetProcessedConnection();
-
 };

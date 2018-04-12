@@ -4,6 +4,7 @@
 
 #import "ZeldaHTTPResponse.h"
 #include "ZeldaDefines.h"
+#include "ZeldaHTTPHelper.h"
 
 ZeldaHTTPResponse::ZeldaHTTPResponse() : ZeldaProtocol() {
 
@@ -11,41 +12,68 @@ ZeldaHTTPResponse::ZeldaHTTPResponse() : ZeldaProtocol() {
 
 ZeldaHTTPResponse::~ZeldaHTTPResponse() = default;
 
-void ZeldaHTTPResponse::processChuck(char **inOut, size_t len, size_t *newLen) {
-    ZeldaProtocol::processChuck(inOut, len, newLen);
+void ZeldaHTTPResponse::processChuck(char **inOut, size_t *len) {
+    if (inOut == nullptr || len == nullptr)
+        return;
+    this->inBytes += *len;
+    ZeldaProtocol::processChuck(inOut, len);
     if (this->packetCount == 0) {
-        this->processResponseHeader(inOut, len, newLen);
+        this->processResponseHeader(inOut, len);
     }
     this->packetCount++;
+    this->outBytes += *len;
 }
 
-void ZeldaHTTPResponse::processResponseHeader(char **inOut, size_t len, size_t *newLen) {
+void ZeldaHTTPResponse::processResponseHeader(char **inOut, size_t *len) {
     auto *buffer = static_cast<const char *>(*inOut);
 
+    if (buffer == nullptr)
+        return;
+
+    auto totalLen = *len;
+
     size_t headerLen = 0;
-    for (size_t i = 0; i < len - 3; ++i) {
+    for (size_t i = 0; i < totalLen - 3; ++i) {
         if (strncmp(buffer + i,"\r\n\r\n", 4) == 0) {
-            headerLen = i;
+            headerLen = i + 4;
             break;
         }
     }
 
-    std::string addition = this->additionalHeaderFields();
-    size_t additionLen = addition.size();
+    size_t bodyPos = headerLen;
+    size_t bodyLen = totalLen - bodyPos;
 
-    size_t newPos = 0;
-    auto *newBuf = (char *)malloc(len + additionLen + 2);
-    memcpy(newBuf + newPos, buffer, headerLen); newPos += headerLen;
-    memcpy(newBuf + newPos, "\r\n", 2); newPos += 2;
-    memcpy(newBuf + newPos, addition.c_str(), additionLen); newPos += additionLen;
-    memcpy(newBuf + newPos, buffer + headerLen, len - headerLen); newPos += len - headerLen;
+    auto hmap = ZeldaHTTPHelper::headerMapFromHeaderData(buffer, headerLen);
+    hmap["X-Proxy-Agent"] = std::string(ZELDA_NAME) + "/" + ZELDA_VERSION;
+    Log->Debug(this->description() + hmap["_"]);
 
+    // transform connection field to lower case
+    std::string connectionField = hmap["Connection"];
+    std::transform(connectionField.begin(), connectionField.end(), connectionField.begin(), ::tolower);
+    if (connectionField == "keep-alive") {
+        keepAlive = true;
+        active = true;
+    } else if (connectionField == "close") {
+        keepAlive = false;
+        active = false;
+    }
+
+    char *newHeaderBuf = nullptr;
+    size_t newHeaderLen = 0;
+    ZeldaHTTPHelper::copyHeaderDataFromHeaderMap(&newHeaderBuf, &newHeaderLen, hmap);
+
+    size_t newLen = newHeaderLen + bodyLen;
+    auto *newBuf = (char *)malloc(newLen);
+    memcpy(newBuf, newHeaderBuf, newHeaderLen);
+    memcpy(newBuf + newHeaderLen, buffer + bodyPos, bodyLen);
+
+    delete(newHeaderBuf);
     delete(*inOut);
-    *inOut = newBuf;
-    *newLen = newPos;
 
+    *inOut = newBuf;
+    *len = newLen;
 }
 
-std::string ZeldaHTTPResponse::additionalHeaderFields() {
-    return std::string("X-Forwarded-By: ") + ZELDA_NAME + "/" + ZELDA_VERSION;
+std::string ZeldaHTTPResponse::description() {
+    return std::string("[<] ");
 }

@@ -6,6 +6,16 @@
 #import <ctime>
 #import "ZeldaLogger.h"
 
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_REDB    "\x1b[91m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_WHITE   "\x1b[37m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+
 ZeldaLogLevel ZeldaLogger::LogLevelFromLevelString(const std::string &level) {
     if (level == ZELDA_LOG_FATAL) {
         return ZeldaLogLevelFatal;
@@ -61,11 +71,11 @@ void ZeldaLogger::Flush() {
 }
 
 void ZeldaLogger::Log(const std::string &level, const std::string &msg) {
-    std::cout << GetCurrentTimeString() << " [" << level << "] " <<  msg << std::endl;
+    std::cout << GetCurrentTimeString() << ColorStringFromLevel(level) << " [" << level << "] " <<  msg << ColorStringFromLevel("") << std::endl;
 }
 
 void ZeldaLogger::Err(const std::string &level, const std::string &msg) {
-    std::cerr << GetCurrentTimeString() << " [" << level << "] " <<  msg << std::endl;
+    std::cerr << GetCurrentTimeString() << ColorStringFromLevel(level) << " [" << level << "] " <<  msg << ColorStringFromLevel("") << std::endl;
 }
 
 std::string ZeldaLogger::GetCurrentTimeString() {
@@ -74,7 +84,23 @@ std::string ZeldaLogger::GetCurrentTimeString() {
     struct tm *now = localtime(&t);
     auto *p = (char *)malloc(32);
     strftime(p, 32, "%x %X", now);
-    return std::string(p);
+    return ANSI_COLOR_CYAN + std::string(p) + ANSI_COLOR_RESET;
+}
+
+std::string ZeldaLogger::ColorStringFromLevel(const std::string &level) {
+    if (!isColoredTerminal) return "";
+    if (level == ZELDA_LOG_ERROR) {
+        return ANSI_COLOR_RED;
+    } else if (level == ZELDA_LOG_WARNING) {
+        return ANSI_COLOR_YELLOW;
+    } else if (level == ZELDA_LOG_FATAL) {
+        return ANSI_COLOR_REDB;
+    } else if (level == ZELDA_LOG_INFO) {
+        return ANSI_COLOR_BLUE;
+    } else if (level == ZELDA_LOG_DEBUG) {
+        return ANSI_COLOR_WHITE;
+    }
+    return ANSI_COLOR_RESET;
 }
 
 std::string ZeldaLogger::S() {
@@ -83,6 +109,8 @@ std::string ZeldaLogger::S() {
 
 ZeldaLogger::ZeldaLogger(const std::string &level) {
     _level = ZeldaLogger::LogLevelFromLevelString(level);
+    const char *term = getenv("TERM");
+    isColoredTerminal = (strstr(term, "xterm") != nullptr);
 }
 
 ZeldaLogger::ZeldaLogger() : ZeldaLogger("info") {
