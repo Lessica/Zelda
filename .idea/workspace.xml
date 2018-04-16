@@ -16,9 +16,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6bd90a34-c6ac-4d12-ba8c-f7fad76fd0ad" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Zelda.cpp" afterPath="$PROJECT_DIR$/Zelda.cpp" />
-      <change beforePath="$PROJECT_DIR$/ZeldaHTTPResponse.cpp" afterPath="$PROJECT_DIR$/ZeldaHTTPResponse.cpp" />
-      <change beforePath="$PROJECT_DIR$/ZeldaLogger.cpp" afterPath="$PROJECT_DIR$/ZeldaLogger.cpp" />
+      <change beforePath="$PROJECT_DIR$/ZeldaHTTPRequest.cpp" afterPath="$PROJECT_DIR$/ZeldaHTTPRequest.cpp" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/CMakeFiles/" />
@@ -32,11 +30,23 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ZeldaHTTPResponse.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ZeldaHTTPResponse.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ZeldaHTTPResponse.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="19" lean-forward="true" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
+            <state relative-caret-position="68">
+              <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="7" selection-end-column="19" />
+              <folding>
+                <element signature="e#44#61#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ZeldaHTTPRequest.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ZeldaHTTPRequest.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -109,7 +119,6 @@
         <option value="$PROJECT_DIR$/ZeldaProtocol.h" />
         <option value="$PROJECT_DIR$/ZeldaProtocol.cpp" />
         <option value="$PROJECT_DIR$/deny.txt" />
-        <option value="$PROJECT_DIR$/ZeldaHTTPRequest.cpp" />
         <option value="$PROJECT_DIR$/base64.hpp" />
         <option value="$PROJECT_DIR$/ZeldaHTTPHelper.h" />
         <option value="$PROJECT_DIR$/passwd.txt" />
@@ -124,6 +133,7 @@
         <option value="$PROJECT_DIR$/Zelda.cpp" />
         <option value="$PROJECT_DIR$/ZeldaLogger.cpp" />
         <option value="$PROJECT_DIR$/ZeldaHTTPResponse.cpp" />
+        <option value="$PROJECT_DIR$/ZeldaHTTPRequest.cpp" />
       </list>
     </option>
   </component>
@@ -435,7 +445,7 @@
       <workItem from="1523410542592" duration="14768000" />
       <workItem from="1523778451757" duration="7666000" />
       <workItem from="1523868822810" duration="9954000" />
-      <workItem from="1523885325083" duration="899000" />
+      <workItem from="1523885325083" duration="964000" />
     </task>
     <task id="LOCAL-00001" summary="Fix splice speedup">
       <created>1523886272430</created>
@@ -458,11 +468,18 @@
       <option name="project" value="LOCAL" />
       <updated>1523886529965</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Fix header import">
+      <created>1523886869626</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1523886869626</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="129226000" />
+    <option name="totallyTimeSpent" value="129291000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -501,7 +518,8 @@
     <MESSAGE value="Fix splice speedup" />
     <MESSAGE value="Fix headers" />
     <MESSAGE value="Lower cmake version" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lower cmake version" />
+    <MESSAGE value="Fix header import" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix header import" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -753,14 +771,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ZeldaHTTPRequest.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="50" column="4" lean-forward="true" selection-start-line="50" selection-start-column="4" selection-end-line="51" selection-end-column="103" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ZeldaAuthenticationAgent.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -826,8 +836,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ZeldaHTTPResponse.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="19" lean-forward="true" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
+        <state relative-caret-position="68">
+          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="7" selection-end-column="19" />
+          <folding>
+            <element signature="e#44#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ZeldaHTTPRequest.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding />
         </state>
       </provider>

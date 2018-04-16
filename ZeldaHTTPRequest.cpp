@@ -3,8 +3,14 @@
 //
 
 #import <csignal>
-#import <sys/types.h>
+#import <algorithm>
+
+#import <stdio.h>
+#import <string.h>
+#import <stdlib.h>
 #import <unistd.h>
+#import <sys/types.h>
+
 #import "ZeldaHTTPRequest.h"
 #import "ZeldaHTTPHelper.h"
 
