@@ -2,6 +2,11 @@
 // Created by Zheng on 05/03/2018.
 //
 
+#import <stdio.h>
+#import <stdlib.h>
+#import <string.h>
+#import <sys/types.h>
+#import <sys/wait.h>
 #import <unistd.h>
 #import <netdb.h>
 
@@ -572,19 +577,19 @@ void Zelda::ForwardTCPData(int source_sock, int destination_sock)
         int buf_pipe[2];
 
         if (pipe(buf_pipe) == -1) {
-            Log.Warning(Log.S() + "Cannot create pipe");
+            Log->Warning("Cannot create pipe");
             return;
         }
 
         while ((n = splice(source_sock, NULL, buf_pipe[PWRITE], NULL, SSIZE_MAX, SPLICE_F_NONBLOCK | SPLICE_F_MOVE)) > 0) {
             if (splice(buf_pipe[PREAD], NULL, destination_sock, NULL, SSIZE_MAX, SPLICE_F_MOVE) < 0) {
-                Log.Warning(Log.S() + "Cannot write to socket");
+                Log->Warning("Cannot write to socket");
                 return;
             }
         }
 
         if (n < 0) {
-            Log.Warning(Log.S() + "Cannot read from socket");
+            Log->Warning("Cannot read from socket");
         }
 
         close(buf_pipe[0]);
