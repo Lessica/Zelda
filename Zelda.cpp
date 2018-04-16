@@ -9,6 +9,9 @@
 #import <sys/wait.h>
 #import <unistd.h>
 #import <netdb.h>
+#import <fcntl.h>
+#import <errno.h>
+#import <climits>
 
 #import "Zelda.h"
 #import "ZeldaDefines.h"

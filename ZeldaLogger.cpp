@@ -4,6 +4,11 @@
 
 #import <iostream>
 #import <ctime>
+
+#import <stdio.h>
+#import <string.h>
+#import <stdlib.h>
+
 #import "ZeldaLogger.h"
 
 #define ANSI_COLOR_RED     "\x1b[31m"

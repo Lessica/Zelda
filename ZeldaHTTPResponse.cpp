@@ -2,9 +2,14 @@
 // Created by Zheng Wu on 2018/3/16.
 //
 
+#import <stdio.h>
+#import <string.h>
+#import <stdlib.h>
+#import <algorithm>
+
 #import "ZeldaHTTPResponse.h"
-#include "ZeldaDefines.h"
-#include "ZeldaHTTPHelper.h"
+#import "ZeldaDefines.h"
+#import "ZeldaHTTPHelper.h"
 
 ZeldaHTTPResponse::ZeldaHTTPResponse() : ZeldaProtocol() {
 
