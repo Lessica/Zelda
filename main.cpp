@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
 #if defined(ZELDA_USE_SPLICE)
         if (result.count("use-splice"))
         {
-            z.SetUseSplice(1);
+            z->SetUseSplice(1);
         }
 #endif
 
