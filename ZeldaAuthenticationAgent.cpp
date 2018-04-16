@@ -2,6 +2,8 @@
 // Created by Zheng on 2018/4/16.
 //
 
+#include <algorithm>
+
 #import "ZeldaAuthenticationAgent.h"
 
 ZeldaAuthenticationAgent::ZeldaAuthenticationAgent() = default;
