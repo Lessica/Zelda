@@ -110,7 +110,7 @@ std::string ZeldaLogger::S() {
 ZeldaLogger::ZeldaLogger(const std::string &level) {
     _level = ZeldaLogger::LogLevelFromLevelString(level);
     const char *term = getenv("TERM");
-    isColoredTerminal = (strstr(term, "xterm") != nullptr);
+    if (term != nullptr) isColoredTerminal = (strstr(term, "xterm") != nullptr);
 }
 
 ZeldaLogger::ZeldaLogger() : ZeldaLogger("info") {

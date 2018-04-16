@@ -7,6 +7,7 @@
 
 #import "Zelda.h"
 #import "ZeldaLogger.h"
+#import "ZeldaHTTPHelper.h"
 
 int main(int argc, char* argv[])
 {
@@ -20,6 +21,9 @@ int main(int argc, char* argv[])
         std::string intro(title);
         intro += " - ";
         intro += "Lightweight HTTP Proxy";
+
+        auto zl = new ZeldaLogger();
+        zl->Info(title);
 
         cxxopts::Options options(argv[0], intro);
 
@@ -39,6 +43,7 @@ int main(int argc, char* argv[])
                 ("use-splice", "Use splice to boost data copy")
 #endif
                 ("mode", "Proxy mode (tunnel*/plain/tcp)", cxxopts::value<std::string>(default_mode), "proxy-mode")
+                ("auth", "Authentication list", cxxopts::value<std::string>(), "list-path")
                 ("log", "Debug level (error/warning/info*/debug)", cxxopts::value<std::string>(default_level), "debug-level")
                 ("version", "Print version")
                 ("help", "Print help");
@@ -94,6 +99,21 @@ int main(int argc, char* argv[])
             z->SetRemotePort(std::stoi(result["remote-port"].as<std::string>()));
         }
 
+        ZeldaAuthenticationAgent *agent = nullptr;
+        if (result.count("auth"))
+        {
+            std::string list_path = result["auth"].as<std::string>();
+            std::list<std::string> auth_list = ZeldaHTTPHelper::authenticationListAtPath(list_path.c_str());
+            auto *auth_agent = new ZeldaAuthenticationAgent();
+            auth_agent->authenticationList = auth_list;
+            z->SetAuthenticationAgent(auth_agent);
+            zl->Info("Found " + std::to_string(auth_list.size()) + " entries in authentication database");
+            if (auth_list.empty()) {
+                zl->Error("Authentication database is empty, and no income connection will be allowed");
+            }
+            agent = auth_agent;
+        }
+
 #if defined(ZELDA_USE_SPLICE)
         if (result.count("use-splice"))
         {
@@ -101,16 +121,16 @@ int main(int argc, char* argv[])
         }
 #endif
 
-        auto zl = new ZeldaLogger(level);
+        zl->SetLogLevel(level);
         z->SetLogger(zl);
 
-        zl->Info(title);
         usleep(100000);
 
         int ret_code = z->StartProxy(mode);
 
-        delete z;
-        delete zl;
+        delete(agent);
+        delete(z);
+        delete(zl);
 
         return ret_code;
 

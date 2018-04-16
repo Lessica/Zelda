@@ -2,8 +2,11 @@
 // Created by Zheng on 2018/4/10.
 //
 
-#include <string>
-#include "ZeldaHTTPHelper.h"
+#import <string>
+#import <fstream>
+#import <sstream>
+#import "ZeldaHTTPHelper.h"
+#import "base64.hpp"
 
 
 std::string ZeldaHTTPHelper::methodStringFromHeaderMap(std::map<std::string, std::string> hmap)
@@ -120,4 +123,25 @@ std::map<std::string, std::string> ZeldaHTTPHelper::headerMapFromHeaderData(cons
     }
 
     return hmap;
+}
+
+std::list<std::string> ZeldaHTTPHelper::authenticationListAtPath(const char *path) {
+    std::ifstream infile(path);
+    if (!infile.is_open()) {
+        return std::list<std::string>();
+    }
+    auto list = std::list<std::string>();
+    std::string line;
+    std::string username;
+    std::string password;
+    while (infile >> username >> password) {
+        std::string out;
+        std::string newLine = username;
+        newLine += ":";
+        newLine += password;
+        Base64::Encode(newLine, &out);
+        list.push_back(out);
+    }
+    infile.close();
+    return list;
 }

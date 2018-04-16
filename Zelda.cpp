@@ -177,6 +177,10 @@ void Zelda::ResetProcessedConnection()
     _connections_processed = 0;
 }
 
+void Zelda::SetAuthenticationAgent(ZeldaAuthenticationAgent *agent) {
+    authenticationAgent = agent;
+}
+
 
 
 #pragma mark - Proxies
@@ -343,7 +347,7 @@ int Zelda::CreateTCPConnection(const char *remote_host, int remote_port, bool ke
 
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        Log->Error("Cannot create new socket");
+        Log->Warning("Cannot create new socket");
         return -1;
     }
 
@@ -360,7 +364,7 @@ int Zelda::CreateTCPConnection(const char *remote_host, int remote_port, bool ke
     if ((server = gethostbyname(remote_host)) == nullptr)
     {
         close(sock);
-        Log->Error("Cannot resolve address " + std::string(remote_host));
+        Log->Warning("Cannot resolve address " + std::string(remote_host));
         return -1;
     }
 
@@ -372,7 +376,7 @@ int Zelda::CreateTCPConnection(const char *remote_host, int remote_port, bool ke
     if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
     {
         close(sock);
-        Log->Error("Cannot connect to " + std::string(remote_host) + ":" + std::to_string(remote_port));
+        Log->Warning("Cannot connect to " + std::string(remote_host) + ":" + std::to_string(remote_port));
         return -1;
     }
 
@@ -424,7 +428,9 @@ void Zelda::HandleTunnelClient(int client_sock)
 {
 
     if (fork() == 0) { // a process which handles tunnel request
-        ZeldaProtocol *httpProtocol = new ZeldaHTTPTunnel();
+        auto *tunnelProtocol = new ZeldaHTTPTunnel();
+        tunnelProtocol->SetAuthenticationAgent(authenticationAgent);
+        ZeldaProtocol *httpProtocol = tunnelProtocol;
         httpProtocol->SetLogger(Log);
         HandleTunnelRequest(client_sock, httpProtocol);
         delete(httpProtocol);
@@ -500,7 +506,7 @@ void Zelda::HandleTunnelRequest(int source_sock, ZeldaProtocol *protocol)
         if (protocol->isHandled())
         { // if request is handled by tunnel protocol
 
-            if (fork() == 0)
+            if (protocol->isActive() && fork() == 0)
             { // build tcp bridge in a separated process
                 HandleTCPClient(source_sock, protocol->GetRemoteAddress(), protocol->GetRemotePort(), protocol->shouldKeepAlive());
                 exit(0);
@@ -519,7 +525,7 @@ void Zelda::HandleTunnelRequest(int source_sock, ZeldaProtocol *protocol)
         if (destination_sock < 0)
         { // downgrade to plain proxy
 
-            Log->Warning(protocol->description() + "Downgrade to plain mode");
+            Log->Debug(protocol->description() + "Downgrade to plain mode");
 
             int remote_sock =
                     CreateTCPConnection(protocol->GetRemoteAddress().c_str(), protocol->GetRemotePort(), protocol->shouldKeepAlive());
@@ -566,19 +572,19 @@ void Zelda::ForwardTCPData(int source_sock, int destination_sock)
         int buf_pipe[2];
 
         if (pipe(buf_pipe) == -1) {
-            Log.Error(Log.S() + "Cannot create pipe");
+            Log.Warning(Log.S() + "Cannot create pipe");
             return;
         }
 
         while ((n = splice(source_sock, NULL, buf_pipe[PWRITE], NULL, SSIZE_MAX, SPLICE_F_NONBLOCK | SPLICE_F_MOVE)) > 0) {
             if (splice(buf_pipe[PREAD], NULL, destination_sock, NULL, SSIZE_MAX, SPLICE_F_MOVE) < 0) {
-                Log.Error(Log.S() + "Cannot write to socket");
+                Log.Warning(Log.S() + "Cannot write to socket");
                 return;
             }
         }
 
         if (n < 0) {
-            Log.Error(Log.S() + "Cannot read from socket");
+            Log.Warning(Log.S() + "Cannot read from socket");
         }
 
         close(buf_pipe[0]);
@@ -595,7 +601,7 @@ void Zelda::ForwardTCPData(int source_sock, int destination_sock)
         }
 
         if (n < 0) {
-            Log->Error("Cannot read from socket");
+            Log->Warning("Cannot read from socket");
         }
 
     }
@@ -666,7 +672,7 @@ void Zelda::ForwardProtocolData(int source_sock, int destination_sock, ZeldaProt
 
     if (n < 0)
     {
-        Log->Error("Cannot read from socket");
+        Log->Warning("Cannot read from socket");
         goto forward_clean;
     }
 
@@ -685,3 +691,4 @@ void Zelda::ForwardProtocolData(int source_sock, int destination_sock, ZeldaProt
     }
 
 }
+

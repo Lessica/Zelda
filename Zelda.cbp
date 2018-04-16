@@ -86,6 +86,12 @@
 		<Unit filename="/Users/Zheng/CLionProjects/Zelda/Zelda.h">
 			<Option target="Zelda"/>
 		</Unit>
+		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaAuthenticationAgent.cpp">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaAuthenticationAgent.h">
+			<Option target="Zelda"/>
+		</Unit>
 		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaDefines.h">
 			<Option target="Zelda"/>
 		</Unit>
@@ -123,6 +129,9 @@
 			<Option target="Zelda"/>
 		</Unit>
 		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaProtocol.h">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/Zheng/CLionProjects/Zelda/base64.hpp">
 			<Option target="Zelda"/>
 		</Unit>
 		<Unit filename="/Users/Zheng/CLionProjects/Zelda/cxxopts.hpp">

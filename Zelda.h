@@ -9,6 +9,7 @@
 #import "ZeldaLogger.h"
 #import "ZeldaHTTPRequest.h"
 #import "ZeldaHTTPResponse.h"
+#import "ZeldaAuthenticationAgent.h"
 
 #define ZELDA_MODE_PLAIN "plain"
 #define ZELDA_MODE_TUNNEL "tunnel"
@@ -49,6 +50,10 @@ public:
     ZeldaLogger *GetLogger();
     void SetLogger(ZeldaLogger *logger);
 
+#pragma mark - Authentication
+
+    void SetAuthenticationAgent(ZeldaAuthenticationAgent *agent);
+
 #pragma mark - Launch
 
     int StartProxy(const ZeldaMode &mode);
@@ -72,11 +77,11 @@ private:
 
 #pragma mark - Socket
 
-    std::string _address;
+    std::string _address = "";
     int _port = 0;
     std::string GetSocketString();
 
-    std::string _remote_address;
+    std::string _remote_address = "";
     int _remote_port = 0;
     std::string GetRemoteSocketString();
 
@@ -106,5 +111,9 @@ private:
     int _connections_processed = 0;
     void AddProcessedConnection();
     void ResetProcessedConnection();
+
+#pragma mark - Authentication
+
+    ZeldaAuthenticationAgent *authenticationAgent = nullptr;
 
 };
