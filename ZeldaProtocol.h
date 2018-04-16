@@ -14,6 +14,7 @@ public:
     virtual std::string description();
 
     bool isActive();
+    bool isHandled();
     bool shouldKeepAlive();
 
 #pragma mark - Loggers
@@ -42,6 +43,7 @@ protected:
 
     bool active = true;
     bool keepAlive = false;
+    bool handled = false;
 
 private:
 

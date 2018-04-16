@@ -11,6 +11,8 @@ public:
     void processChuck(char **inOut, size_t *len) override;
     std::string description() override;
 
+    int httpStatus = 0;
+
 private:
     void processResponseHeader(char **inOut, size_t *len);
 };

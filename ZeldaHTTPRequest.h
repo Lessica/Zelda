@@ -15,6 +15,8 @@ public:
     std::string GetRemoteAddress() override;
     int GetRemotePort() override;
 
+    std::string httpMethod = "";
+
 private:
     std::string _requestAddress;
     int _requestPort = 80;

@@ -64,6 +64,10 @@ bool ZeldaProtocol::isActive() {
     return active;
 }
 
+bool ZeldaProtocol::isHandled() {
+    return handled;
+}
+
 bool ZeldaProtocol::shouldKeepAlive() {
     return keepAlive;
 }

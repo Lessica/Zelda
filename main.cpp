@@ -10,7 +10,8 @@
 
 int main(int argc, char* argv[])
 {
-    try {
+    try
+    {
 
         std::string title(ZELDA_NAME);
         title += " ";
@@ -25,19 +26,19 @@ int main(int argc, char* argv[])
         std::string default_addr(ZELDA_ADDRESS);
         std::string default_port(ZELDA_PORT);
         std::string default_level(ZELDA_LOG_INFO);
-        std::string default_mode("plain");
-        std::string default_max_connection("20");
+        std::string default_mode("tunnel");
+        std::string default_max_connection("100");
 
         options.add_options(ZELDA_NAME)
                 ("a,address", "Bind address (127.0.0.1)", cxxopts::value<std::string>(default_addr), "address")
-                ("p,port", "Bind port (1087)", cxxopts::value<std::string>(default_port), "port")
+                ("p,port", "Bind port (10087)", cxxopts::value<std::string>(default_port), "port")
                 ("remote-address", "Remote address", cxxopts::value<std::string>(), "address")
                 ("remote-port", "Remote port", cxxopts::value<std::string>(), "port")
                 ("max-connection", "Max connection (20)", cxxopts::value<std::string>(default_max_connection), "max-num")
 #if defined(ZELDA_USE_SPLICE)
                 ("use-splice", "Use splice to boost data copy")
 #endif
-                ("mode", "Proxy mode (plain*/tunnel/tcp)", cxxopts::value<std::string>(default_mode), "proxy-mode")
+                ("mode", "Proxy mode (tunnel*/plain/tcp)", cxxopts::value<std::string>(default_mode), "proxy-mode")
                 ("log", "Debug level (error/warning/info*/debug)", cxxopts::value<std::string>(default_level), "debug-level")
                 ("version", "Print version")
                 ("help", "Print help");
@@ -61,25 +62,20 @@ int main(int argc, char* argv[])
         std::string mode(default_mode);
         std::string max_connection(default_max_connection);
 
-        if (result.count("a")) {
+        if (result.count("a"))
             address = result["a"].as<std::string>();
-        }
 
-        if (result.count("p")) {
+        if (result.count("p"))
             port = result["p"].as<std::string>();
-        }
 
-        if (result.count("log")) {
+        if (result.count("log"))
             level = result["log"].as<std::string>();
-        }
 
-        if (result.count("mode")) {
+        if (result.count("mode"))
             mode = result["mode"].as<std::string>();
-        }
 
-        if (result.count("max-connection")) {
+        if (result.count("max-connection"))
             max_connection = result["max-connection"].as<std::string>();
-        }
 
         int port_n = std::stoi(port);
         int max_connection_n = std::stoi(max_connection);
@@ -87,17 +83,20 @@ int main(int argc, char* argv[])
         auto *z = new Zelda(address, port_n);
         z->SetMaxConnection(max_connection_n);
 
-        if (result.count("remote-address")) {
+        if (result.count("remote-address"))
+        {
             std::string remote_address = result["remote-address"].as<std::string>();
             z->SetRemoteAddress(remote_address);
         }
 
-        if (result.count("remote-port")) {
+        if (result.count("remote-port"))
+        {
             z->SetRemotePort(std::stoi(result["remote-port"].as<std::string>()));
         }
 
 #if defined(ZELDA_USE_SPLICE)
-        if (result.count("use-splice")) {
+        if (result.count("use-splice"))
+        {
             z.SetUseSplice(1);
         }
 #endif
@@ -114,8 +113,13 @@ int main(int argc, char* argv[])
         delete zl;
 
         return ret_code;
-    } catch (const cxxopts::OptionException& e) {
+
+    }
+    catch (const cxxopts::OptionException& e)
+    {
         std::cout << "error parsing options: " << e.what() << std::endl;
         return 1;
     }
+
+    return 0;
 }

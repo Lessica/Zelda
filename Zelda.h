@@ -85,11 +85,14 @@ private:
 
 #pragma mark - TCP Client
 
-    void HandleTCPClient(int client_sock);
-    void HandlePlainClient(int client_sock);
+    void HandleTCPClient(int client_sock, std::string remote_address, int remote_port, bool keep_alive);
+    void HandlePlainClient(int client_sock, std::string remote_address, int remote_port, bool keep_alive);
     void HandleTunnelClient(int client_sock);
-    int CreateTCPConnection(const char *remote_host, int remote_port);
     int CreateTCPConnection(const char *remote_host, int remote_port, bool keep_alive);
+
+#pragma mark - Tunnel Request
+
+    void HandleTunnelRequest(int source_sock, ZeldaProtocol *protocol);
 
 #pragma mark - Data Forwarding
 
@@ -103,4 +106,5 @@ private:
     int _connections_processed = 0;
     void AddProcessedConnection();
     void ResetProcessedConnection();
+
 };

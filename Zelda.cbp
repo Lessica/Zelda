@@ -107,6 +107,12 @@
 		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaHTTPResponse.h">
 			<Option target="Zelda"/>
 		</Unit>
+		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaHTTPTunnel.cpp">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaHTTPTunnel.h">
+			<Option target="Zelda"/>
+		</Unit>
 		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaLogger.cpp">
 			<Option target="Zelda"/>
 		</Unit>

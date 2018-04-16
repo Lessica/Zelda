@@ -14,19 +14,26 @@ ZeldaHTTPRequest::ZeldaHTTPRequest() : ZeldaProtocol() {
 
 ZeldaHTTPRequest::~ZeldaHTTPRequest() = default;
 
-void ZeldaHTTPRequest::processChuck(char **inOut, size_t *len) {
+void ZeldaHTTPRequest::processChuck(char **inOut, size_t *len)
+{
+
     if (inOut == nullptr || len == nullptr)
         return;
+
     this->inBytes += *len;
     ZeldaProtocol::processChuck(inOut, len);
-    if (this->packetCount == 0) {
+
+    if (this->packetCount == 0)
         this->processRequestHeader(inOut, len);
-    }
+
     this->packetCount++;
     this->outBytes += *len;
+
 }
 
-void ZeldaHTTPRequest::processRequestHeader(char **inOut, size_t *len) {
+void ZeldaHTTPRequest::processRequestHeader(char **inOut, size_t *len)
+{
+
     auto *buffer = static_cast<const char *>(*inOut);
 
     if (buffer == nullptr)
@@ -43,19 +50,23 @@ void ZeldaHTTPRequest::processRequestHeader(char **inOut, size_t *len) {
     // transform connection field to lower case
     std::string connectionField = hmap["Connection"];
     std::transform(connectionField.begin(), connectionField.end(), connectionField.begin(), ::tolower);
-    if (connectionField == "keep-alive") {
+    if (connectionField == "keep-alive")
+    {
         keepAlive = true;
         active = true;
-    } else if (connectionField == "close") {
+    }
+    else if (connectionField == "close")
+    {
         keepAlive = false;
         active = false;
     }
 
-    Log->Debug(ZeldaHTTPHelper::methodStringFromHeaderMap(hmap));
+    httpMethod = ZeldaHTTPHelper::methodStringFromHeaderMap(hmap);
 
 }
 
 void ZeldaHTTPRequest::processRequestHost(std::string hostString) {
+
     const char *host = hostString.c_str();
     size_t hostLen = hostString.size();
     auto *hostPointer = (char *)malloc(hostLen);
@@ -63,13 +74,15 @@ void ZeldaHTTPRequest::processRequestHost(std::string hostString) {
     hostPointer[hostLen] = '\0';
     const char *portPointer = nullptr;
     char *mid = strstr(hostPointer, ":");
-    if (mid) {
+    if (mid)
+    {
         *mid = '\0';
         portPointer = mid + 1; size_t sz;
         _requestPort = std::stoi(portPointer, &sz);
     }
     _requestAddress = std::string(hostPointer);
     free(hostPointer);
+
 }
 
 std::string ZeldaHTTPRequest::GetRemoteAddress() {
