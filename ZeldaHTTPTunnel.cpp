@@ -4,6 +4,12 @@
 
 #import <map>
 #import <sstream>
+#import <algorithm>
+
+#import <stdio.h>
+#import <string.h>
+#import <stdlib.h>
+
 #import "ZeldaHTTPTunnel.h"
 #import "ZeldaDefines.h"
 #import "ZeldaHTTPHelper.h"
