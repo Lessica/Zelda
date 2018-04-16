@@ -5,6 +5,11 @@
 #import <string>
 #import <fstream>
 #import <sstream>
+
+#import <stdio.h>
+#import <string.h>
+#import <stdlib.h>
+
 #import "ZeldaHTTPHelper.h"
 #import "base64.hpp"
 
