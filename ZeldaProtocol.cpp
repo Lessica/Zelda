@@ -2,6 +2,10 @@
 // Created by Zheng on 18/03/2018.
 //
 
+#import <stdio.h>
+#import <string.h>
+#import <stdlib.h>
+
 #import "ZeldaProtocol.h"
 
 ZeldaProtocol::ZeldaProtocol() = default;
