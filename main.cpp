@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
             {
                 chdir(szPath);
                 pid = getpid();
-                printf("[%d] Zelda Daemon is running...\n", pid);
+                zl->Warning("(" + std::to_string(pid) + ") Zelda Daemon is running...");
 
                 FILE *fp = fopen("daemon.pid", "w");
                 if (!fp) {
@@ -196,6 +196,7 @@ int main(int argc, char* argv[])
 
         }
 
+        // [7] start main proxy
         int ret_code = z->StartProxy(mode);
 
         delete(agent);
