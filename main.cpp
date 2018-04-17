@@ -55,6 +55,8 @@ int main(int argc, char* argv[])
 #endif
                 ("mode", "Proxy mode (tunnel*/plain/tcp)", cxxopts::value<std::string>(default_mode), "proxy-mode")
                 ("auth", "Authentication list", cxxopts::value<std::string>(), "list-path")
+                ("allow", "Host white list", cxxopts::value<std::string>(), "list-path")
+                ("deny", "Host black list", cxxopts::value<std::string>(), "list-path")
                 ("log", "Debug level (error/warning/info*/debug)", cxxopts::value<std::string>(default_level), "debug-level")
                 ("daemonize", "Run in background")
                 ("version", "Print version")
@@ -111,11 +113,11 @@ int main(int argc, char* argv[])
             z->SetRemotePort(std::stoi(result["remote-port"].as<std::string>()));
         }
 
-        ZeldaAuthenticationAgent *agent = nullptr;
+        ZeldaAuthenticationAgent *agent1 = nullptr;
         if (result.count("auth"))
         {
             std::string list_path = result["auth"].as<std::string>();
-            std::list<std::string> auth_list = ZeldaHTTPHelper::authenticationListAtPath(list_path.c_str());
+            std::list<std::string> auth_list = ZeldaAuthenticationAgent::authenticationListAtPath(list_path.c_str());
             auto *auth_agent = new ZeldaAuthenticationAgent();
             auth_agent->authenticationList = auth_list;
             z->SetAuthenticationAgent(auth_agent);
@@ -123,7 +125,30 @@ int main(int argc, char* argv[])
             if (auth_list.empty()) {
                 zl->Error("Authentication database is empty, and no income connection will be allowed");
             }
-            agent = auth_agent;
+            agent1 = auth_agent;
+        }
+
+        ZeldaFilterAgent *agent2 = nullptr;
+        if (result.count("allow") > 0 && result.count("deny") > 0) {
+            zl->Error("White list and black list cannot be applied together");
+        } else if (result.count("allow") > 0) {
+            std::string list_path = result["allow"].as<std::string>();
+            std::list<std::string> my_list = ZeldaFilterAgent::listAtPath(list_path.c_str());
+            auto *filter_agent = new ZeldaFilterAgent();
+            filter_agent->whitelist = my_list;
+            filter_agent->blacklistMode = false;
+            z->SetFilterAgent(filter_agent);
+            zl->Info("Found " + std::to_string(my_list.size()) + " white list entries in filter database");
+            agent2 = filter_agent;
+        } else if (result.count("deny") > 0) {
+            std::string list_path = result["deny"].as<std::string>();
+            std::list<std::string> my_list = ZeldaFilterAgent::listAtPath(list_path.c_str());
+            auto *filter_agent = new ZeldaFilterAgent();
+            filter_agent->blacklist = my_list;
+            filter_agent->blacklistMode = true;
+            z->SetFilterAgent(filter_agent);
+            zl->Info("Found " + std::to_string(my_list.size()) + " black list entries in filter database");
+            agent2 = filter_agent;
         }
 
 #if defined(ZELDA_USE_SPLICE)
@@ -199,7 +224,9 @@ int main(int argc, char* argv[])
         // [7] start main proxy
         int ret_code = z->StartProxy(mode);
 
-        delete(agent);
+        delete(agent1);
+        delete(agent2);
+
         delete(z);
         delete(zl);
 

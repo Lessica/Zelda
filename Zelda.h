@@ -10,6 +10,7 @@
 #import "ZeldaHTTPRequest.h"
 #import "ZeldaHTTPResponse.h"
 #import "ZeldaAuthenticationAgent.h"
+#import "ZeldaFilterAgent.h"
 
 #define ZELDA_MODE_PLAIN "plain"
 #define ZELDA_MODE_TUNNEL "tunnel"
@@ -53,6 +54,10 @@ public:
 #pragma mark - Authentication
 
     void SetAuthenticationAgent(ZeldaAuthenticationAgent *agent);
+
+#pragma mark - Filter
+
+    void SetFilterAgent(ZeldaFilterAgent *agent);
 
 #pragma mark - Launch
 
@@ -115,5 +120,6 @@ private:
 #pragma mark - Authentication
 
     ZeldaAuthenticationAgent *authenticationAgent = nullptr;
+    ZeldaFilterAgent *filterAgent = nullptr;
 
 };

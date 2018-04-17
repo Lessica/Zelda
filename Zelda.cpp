@@ -189,6 +189,10 @@ void Zelda::SetAuthenticationAgent(ZeldaAuthenticationAgent *agent) {
     authenticationAgent = agent;
 }
 
+void Zelda::SetFilterAgent(ZeldaFilterAgent *agent) {
+    filterAgent = agent;
+}
+
 
 
 #pragma mark - Proxies
@@ -205,7 +209,7 @@ int Zelda::StartProxy(const ZeldaMode &mode)
         return -1;
     }
 
-    Log->Info("\"" + mode + "\" proxy listen on " + GetSocketString() + "...");
+    Log->Info(mode + " proxy listen on " + GetSocketString() + "...");
 
     if (mode == ZELDA_MODE_PLAIN || mode == ZELDA_MODE_TUNNEL || mode == ZELDA_MODE_TCP)
     {
@@ -214,7 +218,7 @@ int Zelda::StartProxy(const ZeldaMode &mode)
         {
 
             if (GetRemoteAddress().empty()) {
-                Log->Fatal("Cannot start \"" + mode + "\" proxy without explict destination address");
+                Log->Fatal("Cannot start " + mode + " proxy without explict destination address");
                 return -1;
             }
 
@@ -223,7 +227,7 @@ int Zelda::StartProxy(const ZeldaMode &mode)
         {
 
             if (!GetRemoteAddress().empty()) {
-                Log->Fatal("Cannot start \"" + mode + "\" proxy with explict destination address");
+                Log->Fatal("Cannot start " + mode + " proxy with explict destination address");
                 return -1;
             }
 
@@ -234,7 +238,7 @@ int Zelda::StartProxy(const ZeldaMode &mode)
     else
     {
 
-        Log->Fatal("\"" + mode + "\" proxy not found");
+        Log->Fatal(mode + " proxy not found");
 
     }
 
@@ -438,6 +442,8 @@ void Zelda::HandleTunnelClient(int client_sock)
     if (fork() == 0) { // a process which handles tunnel request
         auto *tunnelProtocol = new ZeldaHTTPTunnel();
         tunnelProtocol->SetAuthenticationAgent(authenticationAgent);
+        tunnelProtocol->SetFilterAgent(filterAgent);
+
         ZeldaProtocol *httpProtocol = tunnelProtocol;
         httpProtocol->SetLogger(Log);
         HandleTunnelRequest(client_sock, httpProtocol);
@@ -545,6 +551,7 @@ void Zelda::HandleTunnelRequest(int source_sock, ZeldaProtocol *protocol)
                     CreateTCPConnection(protocol->GetRemoteAddress().c_str(), protocol->GetRemotePort(), protocol->shouldKeepAlive());
             if (remote_sock < 0) {
                 free(buf);
+                break;
             }
 
             if (fork() == 0)

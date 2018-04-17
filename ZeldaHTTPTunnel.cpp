@@ -82,6 +82,23 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
 
     if (!newmap.count("_"))
     {
+        if (filterAgent != nullptr)
+        {
+            auto host = GetRemoteAddress();
+            if (!filterAgent->isHostAccepted(host))
+            {
+                newmap["_"] = "HTTP/1.1 403 Forbidden";
+                newmap["Connection"] = "Close";
+                newmap["Proxy-Connection"] = "Close";
+                active = false;
+
+                Log->Warning(this->description() + "Host " + host + " is not accepted by filter");
+            }
+        }
+    }
+
+    if (!newmap.count("_"))
+    {
         if (httpMethod == "CONNECT")
         {
             newmap["_"] = "HTTP/1.1 200 Connection Established";
@@ -134,4 +151,8 @@ std::string ZeldaHTTPTunnel::description() {
 
 void ZeldaHTTPTunnel::SetAuthenticationAgent(ZeldaAuthenticationAgent *agent) {
     authenticationAgent = agent;
+}
+
+void ZeldaHTTPTunnel::SetFilterAgent(ZeldaFilterAgent *agent) {
+    filterAgent = agent;
 }

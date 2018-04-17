@@ -14,4 +14,5 @@ public:
     std::list<std::string> authenticationList = std::list<std::string>();
     bool isCipherAccepted(std::string cipher);
 
+    static std::list<std::string> authenticationListAtPath(const char *path);
 };

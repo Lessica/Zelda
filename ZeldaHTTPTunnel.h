@@ -4,6 +4,7 @@
 
 #import "ZeldaHTTPRequest.h"
 #import "ZeldaAuthenticationAgent.h"
+#import "ZeldaFilterAgent.h"
 
 class ZeldaHTTPTunnel: public ZeldaHTTPRequest {
 public:
@@ -14,7 +15,9 @@ public:
     std::string description() override;
 
     void SetAuthenticationAgent(ZeldaAuthenticationAgent *agent);
+    void SetFilterAgent(ZeldaFilterAgent *agent);
 
 private:
     ZeldaAuthenticationAgent *authenticationAgent = nullptr;
+    ZeldaFilterAgent *filterAgent = nullptr;
 };

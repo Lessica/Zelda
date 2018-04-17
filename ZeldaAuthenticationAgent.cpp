@@ -2,7 +2,14 @@
 // Created by Zheng on 2018/4/16.
 //
 
-#include <algorithm>
+#import <algorithm>
+#import <fstream>
+#import <sstream>
+
+#import <stdio.h>
+#import <string.h>
+#import <stdlib.h>
+#import "base64.hpp"
 
 #import "ZeldaAuthenticationAgent.h"
 
@@ -17,4 +24,25 @@ bool ZeldaAuthenticationAgent::isCipherAccepted(std::string cipher)
         return false;
     }
     return true;
+}
+
+std::list<std::string> ZeldaAuthenticationAgent::authenticationListAtPath(const char *path) {
+    std::ifstream infile(path);
+    if (!infile.is_open()) {
+        return std::list<std::string>();
+    }
+    auto list = std::list<std::string>();
+    std::string line;
+    std::string username;
+    std::string password;
+    while (infile >> username >> password) {
+        std::string out;
+        std::string newLine = username;
+        newLine += ":";
+        newLine += password;
+        Base64::Encode(newLine, &out);
+        list.push_back(out);
+    }
+    infile.close();
+    return list;
 }
