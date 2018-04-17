@@ -494,6 +494,12 @@ void Zelda::HandleTunnelRequest(int source_sock, ZeldaProtocol *protocol)
 
         auto buflen = static_cast<uint64_t>(n);
         auto *buf = (char *)malloc(buflen);
+
+        if (buf == nullptr)
+        {
+            goto forward_clean;
+        }
+
         memcpy(buf, buffer, buflen);
 
         size_t newlen = buflen;
@@ -539,7 +545,6 @@ void Zelda::HandleTunnelRequest(int source_sock, ZeldaProtocol *protocol)
                     CreateTCPConnection(protocol->GetRemoteAddress().c_str(), protocol->GetRemotePort(), protocol->shouldKeepAlive());
             if (remote_sock < 0) {
                 free(buf);
-                goto forward_clean;
             }
 
             if (fork() == 0)
@@ -639,12 +644,21 @@ void Zelda::ForwardProtocolData(int source_sock, int destination_sock, ZeldaProt
 
         auto buflen = static_cast<uint64_t>(n);
         auto *buf = (char *)malloc(buflen);
+
+        if (buf == nullptr)
+        {
+            goto forward_clean;
+        }
+
         memcpy(buf, buffer, buflen);
 
         size_t newlen = buflen;
         protocol->processChuck(&buf, &newlen);
 
-        if (buf == nullptr) goto forward_clean;
+        if (buf == nullptr)
+        {
+            goto forward_clean;
+        }
 
         if (destination_sock < 0)
         {

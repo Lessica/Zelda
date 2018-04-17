@@ -1,10 +1,22 @@
-#import <iostream>
+#import <stdio.h>
+#import <stdlib.h>
+#import <time.h>
 #import <unistd.h>
+#import <signal.h>
+#import <fcntl.h>
+#import <ctype.h>
+#import <unistd.h>
+
+#import <sys/stat.h>
+#import <sys/param.h>
+#import <sys/types.h>
+#import <sys/wait.h>
+#import <sys/syscall.h>
+#import <iostream>
 
 #import "cxxopts.hpp"
 
 #import "ZeldaDefines.h"
-
 #import "Zelda.h"
 #import "ZeldaLogger.h"
 #import "ZeldaHTTPHelper.h"
@@ -45,6 +57,7 @@ int main(int argc, char* argv[])
                 ("mode", "Proxy mode (tunnel*/plain/tcp)", cxxopts::value<std::string>(default_mode), "proxy-mode")
                 ("auth", "Authentication list", cxxopts::value<std::string>(), "list-path")
                 ("log", "Debug level (error/warning/info*/debug)", cxxopts::value<std::string>(default_level), "debug-level")
+                ("daemonize", "Run in background")
                 ("version", "Print version")
                 ("help", "Print help");
 
@@ -125,6 +138,64 @@ int main(int argc, char* argv[])
         z->SetLogger(zl);
 
         usleep(100000);
+
+        bool daemonize = false;
+        if (result.count("daemonize")) {
+            daemonize = true;
+        }
+
+        if (daemonize) {
+            pid_t pid;
+            int i;
+
+            // [1] fork child process and exit father process
+            if ((pid = fork()) != 0) {
+                exit(EXIT_SUCCESS);
+            } else if (pid < 0) {
+                exit(EXIT_FAILURE);
+            }
+
+            // [2] create a new session
+            setsid();
+
+            if ((pid = fork()) != 0) {
+                exit(EXIT_SUCCESS);
+            } else if (pid < 0) {
+                exit(EXIT_FAILURE);
+            }
+
+            // [3] set current path
+            char szPath[PATH_MAX];
+            if(getcwd(szPath, sizeof(szPath)) == nullptr)
+            {
+                perror("getcwd");
+                exit(EXIT_FAILURE);
+            }
+            else
+            {
+                chdir(szPath);
+                pid = getpid();
+                printf("[%d] Zelda Daemon is running...\n", pid);
+
+                FILE *fp = fopen("daemon.pid", "w");
+                if (!fp) {
+                    perror("fopen");
+                    exit(EXIT_FAILURE);
+                }
+                fprintf(fp, "%d", pid);
+                fclose(fp);
+            }
+
+            // [4] umask 0
+            umask(0);
+
+            // [5] close useless fd
+            for (i = 0; i < NOFILE; ++i)
+                close(i);
+
+            // [6] set termianl signal (skip)
+
+        }
 
         int ret_code = z->StartProxy(mode);
 

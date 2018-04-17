@@ -95,6 +95,12 @@
 		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaDefines.h">
 			<Option target="Zelda"/>
 		</Unit>
+		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaFilterAgent.cpp">
+			<Option target="Zelda"/>
+		</Unit>
+		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaFilterAgent.h">
+			<Option target="Zelda"/>
+		</Unit>
 		<Unit filename="/Users/Zheng/CLionProjects/Zelda/ZeldaHTTPHelper.cpp">
 			<Option target="Zelda"/>
 		</Unit>
