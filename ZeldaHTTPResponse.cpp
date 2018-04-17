@@ -85,8 +85,8 @@ void ZeldaHTTPResponse::processResponseHeader(char **inOut, size_t *len)
     memcpy(newBuf, newHeaderBuf, newHeaderLen);
     memcpy(newBuf + newHeaderLen, buffer + bodyPos, bodyLen);
 
-    delete(newHeaderBuf);
-    delete(*inOut);
+    free(newHeaderBuf);
+    free(*inOut);
 
     *inOut = newBuf;
     *len = newLen;

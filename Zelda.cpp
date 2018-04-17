@@ -441,7 +441,7 @@ void Zelda::HandleTunnelClient(int client_sock)
         ZeldaProtocol *httpProtocol = tunnelProtocol;
         httpProtocol->SetLogger(Log);
         HandleTunnelRequest(client_sock, httpProtocol);
-        delete(httpProtocol);
+        delete(tunnelProtocol);
         exit(0);
     }
 
@@ -507,7 +507,7 @@ void Zelda::HandleTunnelRequest(int source_sock, ZeldaProtocol *protocol)
         if (protocol->GetRemoteAddress().empty() || protocol->GetRemotePort() == 0)
         {
             // do not process following packets
-            delete(buf);
+            free(buf);
             break;
         }
 
@@ -525,7 +525,7 @@ void Zelda::HandleTunnelRequest(int source_sock, ZeldaProtocol *protocol)
             Log->Debug(protocol->description() + std::to_string(newlen) + " bytes");
 
             // do not process following packets
-            delete(buf);
+            free(buf);
             break;
 
         }
@@ -555,7 +555,8 @@ void Zelda::HandleTunnelRequest(int source_sock, ZeldaProtocol *protocol)
         // forward directly
         send(destination_sock, buf, newlen, 0);
         Log->Debug(protocol->description() + std::to_string(newlen) + " bytes");
-        delete(buf);
+
+        free(buf);
 
     }
 
@@ -647,7 +648,7 @@ void Zelda::ForwardProtocolData(int source_sock, int destination_sock, ZeldaProt
 
             if (protocol->GetRemoteAddress().empty() || protocol->GetRemotePort() == 0)
             {
-                delete(buf);
+                free(buf);
                 break;
             }
 
@@ -674,7 +675,7 @@ void Zelda::ForwardProtocolData(int source_sock, int destination_sock, ZeldaProt
         send(destination_sock, buf, newlen, 0);
         Log->Debug(protocol->description() + std::to_string(newlen) + " bytes");
 
-        delete(buf);
+        free(buf);
 
     }
 

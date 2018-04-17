@@ -53,7 +53,7 @@ void ZeldaProtocol::processStartLine(char **inOut, size_t *len) {
     line[lineLen] = '\0';
 
     Log->Info(line);
-    delete(line);
+    free(line);
 }
 
 std::string ZeldaProtocol::GetRemoteAddress() {
