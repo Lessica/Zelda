@@ -89,13 +89,13 @@ std::map<std::string, std::string> ZeldaHTTPHelper::headerMapFromHeaderData(cons
             sepLoc - lineStart > 0 &&
             lineEnd - sepLoc > 0) {
 
-            auto *hkey = (char *)malloc(BUFSIZ);
+            char hkey[BUFSIZ];
             size_t sepLen = sepLoc - lineStart;
             strncpy(hkey, data + lineStart, sepLen);
             hkey[sepLen] = '\0';
 
             size_t spaceLoc = sepLoc + 2;
-            auto *hval = (char *)malloc(BUFSIZ);
+            char hval[BUFSIZ];
             size_t valLen = lineEnd - spaceLoc;
             strncpy(hval, data + spaceLoc, valLen);
             hval[valLen] = '\0';
@@ -105,23 +105,16 @@ std::map<std::string, std::string> ZeldaHTTPHelper::headerMapFromHeaderData(cons
 
             hmap[hkeyStr] = hValStr;
 
-            free(hkey);
-            free(hval);
-
         }
         else if (lineEnd != 0 && isFirstLine)
         {
 
-            auto *hhdr = (char *)malloc(BUFSIZ);
+            char hhdr[BUFSIZ];
             size_t hdrLen = lineEnd - lineStart;
             strncpy(hhdr, data + lineStart, hdrLen);
             hhdr[hdrLen] = '\0';
-
             std::string hhdrStr(hhdr);
-
             hmap["_"] = hhdrStr;
-
-            free(hhdr);
 
         }
 
@@ -149,4 +142,12 @@ std::list<std::string> ZeldaHTTPHelper::authenticationListAtPath(const char *pat
     }
     infile.close();
     return list;
+}
+
+std::string ZeldaHTTPHelper::getGMTDateString() {
+    char buf[BUFSIZ];
+    time_t now = time(nullptr);
+    struct tm tm = *gmtime(&now);
+    strftime(buf, sizeof buf, "%a, %d %b %Y %H:%M:%S GMT", &tm);
+    return std::string(buf);
 }

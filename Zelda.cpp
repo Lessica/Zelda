@@ -537,7 +537,10 @@ void Zelda::HandleTunnelRequest(int source_sock, ZeldaProtocol *protocol)
 
             int remote_sock =
                     CreateTCPConnection(protocol->GetRemoteAddress().c_str(), protocol->GetRemotePort(), protocol->shouldKeepAlive());
-            if (remote_sock < 0) goto forward_clean;
+            if (remote_sock < 0) {
+                free(buf);
+                goto forward_clean;
+            }
 
             if (fork() == 0)
             { // a process forwarding data from remote socket to client
@@ -654,7 +657,10 @@ void Zelda::ForwardProtocolData(int source_sock, int destination_sock, ZeldaProt
 
             int remote_sock =
                     CreateTCPConnection(protocol->GetRemoteAddress().c_str(), protocol->GetRemotePort(), protocol->shouldKeepAlive());
-            if (remote_sock < 0) goto forward_clean;
+            if (remote_sock < 0) {
+                free(buf);
+                goto forward_clean;
+            }
 
             if (fork() == 0)
             { // a process forwarding data from remote socket to client

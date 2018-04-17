@@ -48,8 +48,9 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
             if (!hmap.count("Proxy-Authorization"))
             {
                 newmap["_"] = "HTTP/1.1 407 Proxy Authentication Required";
-                newmap["Proxy-Authenticate"] = "Basic";
                 newmap["Connection"] = "Close";
+                newmap["Proxy-Connection"] = "Close";
+                newmap["Proxy-Authenticate"] = "Basic";
                 active = false;
             }
             else
@@ -70,6 +71,7 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
                 {
                     newmap["_"] = "HTTP/1.1 403 Forbidden";
                     newmap["Connection"] = "Close";
+                    newmap["Proxy-Connection"] = "Close";
                     active = false;
 
                     Log->Warning(this->description() + "Proxy authentication failed");
@@ -89,7 +91,9 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
 
     if (newmap.count("_")) {
         Log->Debug(this->description() + newmap["_"]);
+
         newmap["Proxy-Agent"] = std::string(ZELDA_NAME) + "/" + ZELDA_VERSION;
+        newmap["Date"] = ZeldaHTTPHelper::getGMTDateString();
 
         size_t headerLen = 0;
         for (size_t i = 0; i < totalLen - 3; ++i) {

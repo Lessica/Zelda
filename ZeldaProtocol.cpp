@@ -48,12 +48,11 @@ void ZeldaProtocol::processStartLine(char **inOut, size_t *len) {
         }
     }
 
-    auto *line = (char *)malloc(lineLen + 1); // + string terminator
+    char line[lineLen + 1]; // + string terminator
     memcpy(line, buffer, lineLen);
     line[lineLen] = '\0';
 
     Log->Info(line);
-    free(line);
 }
 
 std::string ZeldaProtocol::GetRemoteAddress() {

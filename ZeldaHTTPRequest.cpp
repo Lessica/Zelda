@@ -75,7 +75,7 @@ void ZeldaHTTPRequest::processRequestHost(std::string hostString) {
 
     const char *host = hostString.c_str();
     size_t hostLen = hostString.size();
-    auto *hostPointer = (char *)malloc(hostLen);
+    char hostPointer[hostLen];
     memcpy(hostPointer, host, hostLen);
     hostPointer[hostLen] = '\0';
     const char *portPointer = nullptr;
@@ -87,7 +87,6 @@ void ZeldaHTTPRequest::processRequestHost(std::string hostString) {
         _requestPort = std::stoi(portPointer, &sz);
     }
     _requestAddress = std::string(hostPointer);
-    free(hostPointer);
 
 }
 

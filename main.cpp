@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
         intro += " - ";
         intro += "Lightweight HTTP Proxy";
 
-        auto zl = new ZeldaLogger();
+        auto *zl = new ZeldaLogger();
         zl->Info(title);
 
         cxxopts::Options options(argv[0], intro);
