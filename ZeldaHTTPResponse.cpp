@@ -57,14 +57,13 @@ void ZeldaHTTPResponse::processResponseHeader(char **inOut, size_t *len)
     size_t bodyPos = headerLen;
     size_t bodyLen = totalLen - bodyPos;
 
-    auto hmap = ZeldaHTTPHelper::headerMapFromHeaderData(buffer, headerLen);
+    auto hmap = ZeldaHTTPHelper::headerMapFromHeaderData(buffer, headerLen, false);
     hmap["Proxy-Agent"] = std::string(ZELDA_NAME) + "/" + ZELDA_VERSION;
     Log->Debug(this->description() + hmap["_"]);
 
     // transform connection field to lower case
     std::string connectionField = hmap["Connection"];
     std::transform(connectionField.begin(), connectionField.end(), connectionField.begin(), ::tolower);
-
     if (connectionField == "keep-alive")
     {
         keepAlive = true;
@@ -75,6 +74,14 @@ void ZeldaHTTPResponse::processResponseHeader(char **inOut, size_t *len)
         keepAlive = false;
         active = false;
     }
+
+    hmap.erase("Connection");
+    if (keepAlive) {
+        hmap["Connection"] = "Keep-Alive";
+    } else {
+        hmap["Connection"] = "Close";
+    }
+
 
     char *newHeaderBuf = nullptr;
     size_t newHeaderLen = 0;

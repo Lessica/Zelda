@@ -12,7 +12,7 @@ public:
 
 #pragma mark - Header
 
-    static std::map<std::string, std::string> headerMapFromHeaderData(const char *data, size_t len);
+    static std::map<std::string, std::string> headerMapFromHeaderData(const char *data, size_t len, bool is_request);
     static void copyHeaderDataFromHeaderMap(char **dst, size_t *len, std::map<std::string, std::string> hmap);
     static std::string methodStringFromHeaderMap(std::map<std::string, std::string> hmap);
     static std::string getGMTDateString();

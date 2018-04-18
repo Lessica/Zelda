@@ -26,6 +26,8 @@ public:
     explicit ZeldaLogger(const std::string &level);
 
     void SetLogLevel(const std::string &level);
+    void SetLogPath(const std::string &path);
+
     void Fatal(const std::string &msg);
     void Fatal(const char *msg);
     void Error(const std::string &msg);
@@ -43,6 +45,8 @@ private:
     ZeldaLogLevel _level;
     ZeldaLogLevel LogLevelFromLevelString(const std::string &level);
     std::string ColorStringFromLevel(const std::string &level);
+
+    std::string _logPath;
 
     void Log(const std::string &level, const std::string &msg);
     void Err(const std::string &level, const std::string &msg);

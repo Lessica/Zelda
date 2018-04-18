@@ -43,7 +43,7 @@ void ZeldaHTTPHelper::copyHeaderDataFromHeaderMap(char **dst, size_t *len, std::
 
 }
 
-std::map<std::string, std::string> ZeldaHTTPHelper::headerMapFromHeaderData(const char *data, size_t len)
+std::map<std::string, std::string> ZeldaHTTPHelper::headerMapFromHeaderData(const char *data, size_t len, bool is_request)
 {
 
     auto hmap = std::map<std::string, std::string>();
@@ -113,7 +113,39 @@ std::map<std::string, std::string> ZeldaHTTPHelper::headerMapFromHeaderData(cons
             strncpy(hhdr, data + lineStart, hdrLen);
             hhdr[hdrLen] = '\0';
             std::string hhdrStr(hhdr);
-            hmap["_"] = hhdrStr;
+
+            if (is_request) {
+                std::string method;
+                std::string url;
+                std::string protocol;
+
+                std::istringstream iss(hhdrStr);
+                iss >> method >> url >> protocol;
+
+                int count = 0;
+                std::string::size_type pos = 0;
+                while (count < 3) {
+                    pos = url.find('/', pos + 1);
+                    if (pos == std::string::npos) {
+                        break;
+                    }
+                    count++;
+                }
+
+                if (count == 3) {
+                    url = url.substr(pos, url.size() - pos);
+                }
+
+                std::string hhdrNewStr;
+                hhdrNewStr += method;
+                hhdrNewStr += " ";
+                hhdrNewStr += url;
+                hhdrNewStr += " ";
+                hhdrNewStr += protocol;
+                hmap["_"] = hhdrNewStr;
+            } else {
+                hmap["_"] = hhdrStr;
+            }
 
         }
 

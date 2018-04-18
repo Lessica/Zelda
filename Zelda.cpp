@@ -373,7 +373,7 @@ int Zelda::CreateTCPConnection(const char *remote_host, int remote_port, bool ke
         }
     }
 
-    if ((server =  (remote_host)) == nullptr)
+    if ((server = gethostbyname(remote_host)) == nullptr)
     {
         close(sock);
         Log->Warning("Cannot resolve address " + std::string(remote_host));
@@ -573,6 +573,10 @@ void Zelda::HandleTunnelRequest(int source_sock, ZeldaProtocol *protocol)
 
         free(buf);
 
+        if (!protocol->isActive()) {
+            break;
+        }
+
     }
 
     forward_clean:
@@ -703,6 +707,10 @@ void Zelda::ForwardProtocolData(int source_sock, int destination_sock, ZeldaProt
         Log->Debug(protocol->description() + std::to_string(newlen) + " bytes");
 
         free(buf);
+
+        if (!protocol->isActive()) {
+            break;
+        }
 
     }
 

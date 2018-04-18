@@ -47,11 +47,8 @@ void ZeldaHTTPRequest::processRequestHeader(char **inOut, size_t *len)
 
     auto totalLen = *len;
 
-    auto hmap = ZeldaHTTPHelper::headerMapFromHeaderData(buffer, totalLen);
+    auto hmap = ZeldaHTTPHelper::headerMapFromHeaderData(buffer, totalLen, true);
     this->processRequestHost(hmap["Host"]);
-    hmap["Connection"] = hmap["Proxy-Connection"];
-    hmap.erase("Proxy-Connection"); // fix/rename connection field
-    Log->Debug(this->description() + hmap["_"]);
 
     // transform connection field to lower case
     std::string connectionField = hmap["Connection"];
@@ -66,6 +63,18 @@ void ZeldaHTTPRequest::processRequestHeader(char **inOut, size_t *len)
         keepAlive = false;
         active = false;
     }
+
+    hmap.erase("Connection");
+    hmap.erase("Keep-Alive");
+    hmap.erase("Proxy-Connection");
+
+    if (keepAlive) {
+        hmap["Connection"] = "Keep-Alive";
+    } else {
+        hmap["Connection"] = "Close";
+    }
+
+    Log->Debug(this->description() + hmap["_"]);
 
     httpMethod = ZeldaHTTPHelper::methodStringFromHeaderMap(hmap);
 

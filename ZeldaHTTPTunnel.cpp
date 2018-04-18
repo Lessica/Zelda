@@ -46,13 +46,12 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
     {
         if (authenticationAgent != nullptr)
         {
-            auto hmap = ZeldaHTTPHelper::headerMapFromHeaderData(buffer, totalLen);
+            auto hmap = ZeldaHTTPHelper::headerMapFromHeaderData(buffer, totalLen, true);
             if (!hmap.count("Proxy-Authorization"))
             {
                 newmap["_"] = "HTTP/1.1 407 Proxy Authentication Required";
                 newmap["Connection"] = "Close";
-                newmap["Proxy-Connection"] = "Close";
-                newmap["Proxy-Authenticate"] = "Basic";
+                newmap["Proxy-Authenticate"] = "Basic realm=\"*\"";
                 active = false;
             }
             else
@@ -73,13 +72,12 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
                 {
                     newmap["_"] = "HTTP/1.1 403 Forbidden";
                     newmap["Connection"] = "Close";
-                    newmap["Proxy-Connection"] = "Close";
 
                     body += ZeldaHTTPHelper::forbiddenPage();
 
                     active = false;
 
-                    Log->Warning(this->description() + "Proxy authentication failed");
+                    Log->Debug(this->description() + "Proxy authentication failed");
                 }
             }
         }
@@ -94,13 +92,12 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
             {
                 newmap["_"] = "HTTP/1.1 403 Forbidden";
                 newmap["Connection"] = "Close";
-                newmap["Proxy-Connection"] = "Close";
 
                 body += ZeldaHTTPHelper::forbiddenPage();
 
                 active = false;
 
-                Log->Warning(this->description() + "Host " + host + " is not accepted by filter");
+                Log->Debug(this->description() + "Host " + host + " is not accepted by filter");
             }
         }
     }
@@ -122,7 +119,8 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
 
         size_t bodyLen = body.size();
         if (!body.empty()) {
-            newmap["Content-Type"] = "text/html";
+            newmap["Content-Type"] = "text/html; charset=utf-8";
+            newmap["Cache-Control"] = "no-cache";
             newmap["Server"] = newmap["Proxy-Agent"];
         }
 

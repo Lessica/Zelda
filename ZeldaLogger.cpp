@@ -40,6 +40,10 @@ void ZeldaLogger::SetLogLevel(const std::string &level) {
     _level = ZeldaLogger::LogLevelFromLevelString(level);
 }
 
+void ZeldaLogger::SetLogPath(const std::string &path) {
+    _logPath = std::string(path);
+}
+
 void ZeldaLogger::Fatal(const std::string &msg) {
     if (_level >= ZeldaLogLevelFatal) {
         ZeldaLogger::Err(ZELDA_LOG_FATAL, msg);

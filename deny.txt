@@ -2,3 +2,6 @@ www.google.com
 www.googleapis.com
 accounts.google.com
 www.bootcss.com
+clients1.google.com
+clients2.google.com
+www.google.com.hk
