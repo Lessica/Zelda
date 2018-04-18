@@ -129,3 +129,13 @@ std::string ZeldaHTTPHelper::getGMTDateString() {
     strftime(buf, sizeof buf, "%a, %d %b %Y %H:%M:%S GMT", &tm);
     return std::string(buf);
 }
+
+std::string ZeldaHTTPHelper::forbiddenPage() {
+    size_t maxlen = BUFSIZ * 16;
+    FILE *fp = fopen("403.html", "rb");
+    char buffer[maxlen];
+    bzero(buffer, maxlen);
+    fread(buffer, maxlen, 1, fp);
+    fclose(fp);
+    return std::string(buffer);
+}

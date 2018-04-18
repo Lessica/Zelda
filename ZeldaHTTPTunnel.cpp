@@ -40,6 +40,8 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
     auto totalLen = *len;
     auto newmap = std::map<std::string, std::string>();
 
+    std::string body;
+
     if (!newmap.count("_"))
     {
         if (authenticationAgent != nullptr)
@@ -72,6 +74,9 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
                     newmap["_"] = "HTTP/1.1 403 Forbidden";
                     newmap["Connection"] = "Close";
                     newmap["Proxy-Connection"] = "Close";
+
+                    body += ZeldaHTTPHelper::forbiddenPage();
+
                     active = false;
 
                     Log->Warning(this->description() + "Proxy authentication failed");
@@ -90,6 +95,9 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
                 newmap["_"] = "HTTP/1.1 403 Forbidden";
                 newmap["Connection"] = "Close";
                 newmap["Proxy-Connection"] = "Close";
+
+                body += ZeldaHTTPHelper::forbiddenPage();
+
                 active = false;
 
                 Log->Warning(this->description() + "Host " + host + " is not accepted by filter");
@@ -112,16 +120,11 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
         newmap["Proxy-Agent"] = std::string(ZELDA_NAME) + "/" + ZELDA_VERSION;
         newmap["Date"] = ZeldaHTTPHelper::getGMTDateString();
 
-        size_t headerLen = 0;
-        for (size_t i = 0; i < totalLen - 3; ++i) {
-            if (strncmp(buffer + i,"\r\n\r\n", 4) == 0) {
-                headerLen = i + 4;
-                break;
-            }
+        size_t bodyLen = body.size();
+        if (!body.empty()) {
+            newmap["Content-Type"] = "text/html";
+            newmap["Server"] = newmap["Proxy-Agent"];
         }
-
-        size_t bodyPos = headerLen;
-        size_t bodyLen = totalLen - bodyPos;
 
         char *newHeaderBuf = nullptr;
         size_t newHeaderLen = 0;
@@ -130,7 +133,7 @@ void ZeldaHTTPTunnel::processChuck(char **inOut, size_t *len) {
         size_t newLen = newHeaderLen + bodyLen;
         auto *newBuf = (char *)malloc(newLen);
         memcpy(newBuf, newHeaderBuf, newHeaderLen);
-        memcpy(newBuf + newHeaderLen, buffer + bodyPos, bodyLen);
+        memcpy(newBuf + newHeaderLen, body.c_str(), bodyLen);
 
         free(newHeaderBuf);
         free(*inOut);

@@ -17,4 +17,6 @@ public:
     static std::string methodStringFromHeaderMap(std::map<std::string, std::string> hmap);
     static std::string getGMTDateString();
 
+    static std::string forbiddenPage();
+
 };

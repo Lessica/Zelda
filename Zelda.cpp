@@ -373,7 +373,7 @@ int Zelda::CreateTCPConnection(const char *remote_host, int remote_port, bool ke
         }
     }
 
-    if ((server = gethostbyname(remote_host)) == nullptr)
+    if ((server =  (remote_host)) == nullptr)
     {
         close(sock);
         Log->Warning("Cannot resolve address " + std::string(remote_host));

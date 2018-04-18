@@ -1,2 +1,4 @@
+www.google.com
 www.googleapis.com
 accounts.google.com
+www.bootcss.com
